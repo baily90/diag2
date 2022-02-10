@@ -1,12 +1,15 @@
 import {
-  Button, Layout, Menu,
+  Button,
+  Layout, Menu,
 } from 'antd';
 import { FunctionComponent } from 'react';
 import { Link, Outlet } from 'react-router-dom';
-import { CaretDownFilled } from '@ant-design/icons';
+import { CaretDownFilled, SettingOutlined } from '@ant-design/icons';
+import { useSelector } from 'react-redux';
 import ReportRuleButton from '@/components/ReportRuleButton';
 import DropdownButton from '@/components/DropdownButton';
 import './index.less';
+import { RootState } from '@/store';
 
 const {
   Sider, Content,
@@ -18,13 +21,15 @@ interface BasicLayoutProps {
 
 const BasicLayout: FunctionComponent<BasicLayoutProps> = () => {
   console.log('BasicLayout');
+  const { base } = useSelector((state: RootState) => state.user);
   return (
     <Layout className="site-layout">
       <Sider>
         <DropdownButton>
-          <Button>
-            设置
-            <CaretDownFilled />
+          <Button type="text" style={{ marginLeft: '10PX', color: '#fff' }}>
+            <SettingOutlined />
+            <span className="userName">{base.name}</span>
+            <CaretDownFilled style={{ color: '#ffffff' }} />
           </Button>
         </DropdownButton>
         <Menu
@@ -39,7 +44,9 @@ const BasicLayout: FunctionComponent<BasicLayoutProps> = () => {
             <Link to="/historyReport">历史报告</Link>
           </Menu.Item>
         </Menu>
-        <ReportRuleButton shape="round" />
+        <div className="rulesButton">
+          <ReportRuleButton shape="round" />
+        </div>
       </Sider>
       <Content className="site-content">
         <Outlet />

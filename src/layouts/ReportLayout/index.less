@@ -11,7 +11,40 @@
   .header {
     width: 1200px;
     height: 138px;
-    background: rgba(255, 0, 0, .1);
+    padding: 25px 40px 0;
+    .hospitalName {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      line-height: 26px;
+      font-size: 19px;
+      color: #fff;
+      font-weight: bolder;
+    }
+    .patientInfo {
+      margin-top: 15px;
+      .label {
+        display: block;
+        width: 100%;
+        font-size: 13px;
+        color: #CFE9FF;
+        line-height: 18px;
+        font-weight: normal;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .value {
+        display: block;
+        width: 100%;
+        font-size: 16px;
+        color: #fff;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
   }
   .report {
     width: 1200px;

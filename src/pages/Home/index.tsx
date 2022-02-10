@@ -9,7 +9,7 @@ interface HomeProps {
 const Home: FunctionComponent<HomeProps> = () => {
   const navigate = useNavigate();
   const handleGo2EditReport = () => {
-    navigate('/editReport/777888999');
+    navigate('/editReport/7316');
   };
   return (
     <>
