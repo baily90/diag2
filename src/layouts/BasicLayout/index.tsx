@@ -26,7 +26,7 @@ const BasicLayout: FunctionComponent<BasicLayoutProps> = () => {
     <Layout className="site-layout">
       <Sider>
         <DropdownButton>
-          <Button type="text" style={{ marginLeft: '10PX', color: '#fff' }}>
+          <Button type="text" style={{ marginLeft: '10px', color: '#fff' }}>
             <SettingOutlined />
             <span className="userName">{base.name}</span>
             <CaretDownFilled style={{ color: '#ffffff' }} />

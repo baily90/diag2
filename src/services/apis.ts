@@ -2,7 +2,11 @@ export default {
   user: {
     getUserInfo: '/diag_doctor/mine',
   },
-  EditReport: {
+  editReport: {
     getDoctorCheck: (id) => `/diag_doctor/check/${id}`,
+  },
+  historyReport: {
+    getHistoryReportList: (page) => `/diag_doctor/report_list/${page}`,
+    getProductList: '/diag_doctor/product/list',
   },
 };

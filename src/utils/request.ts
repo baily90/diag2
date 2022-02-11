@@ -26,16 +26,10 @@ request.interceptors.response.use(
     const { code } = data;
     if ([400, 40001, 401000000, 403000000].includes(code)) {
       // token失效
-      // code here ...
-
-      // tokenStorage.clear();
-      // if (history.location.pathname !== '/user/login') {
-      //   history.replace({
-      //     pathname: '/user/login',
-      //   });
-      // }
+      tokenStorage.clear();
+      window.location.href = '/user/login';
+      return null;
     }
-
     return data;
   },
   (err) => {
