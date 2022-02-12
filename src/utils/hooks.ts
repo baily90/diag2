@@ -11,12 +11,18 @@ export const useDynamicTableSize = () => {
   }, [fetchDom]);
 };
 
-export const useConfirm = (content: string, onOkCB: () => void) => {
-  Modal.confirm({
-    title: '提示',
+export const useConfirm = ({
+  title = '提示',
+  content = '',
+  okText = '确认',
+  cancelText = '取消',
+}, onOkCB: () => void) => {
+  const modal = Modal.confirm({
+    title,
     content,
-    okText: '确认',
-    cancelText: '取消',
+    okText,
+    cancelText,
     onOk: () => onOkCB(),
   });
+  return modal;
 };

@@ -8,5 +8,6 @@ export default {
   historyReport: {
     getHistoryReportList: (page) => `/diag_doctor/report_list/${page}`,
     getProductList: '/diag_doctor/product/list',
+    withdrawReport: (id: number) => `/diag_doctor/withdraw/${id}`,
   },
 };

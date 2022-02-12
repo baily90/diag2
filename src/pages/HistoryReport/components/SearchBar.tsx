@@ -1,6 +1,10 @@
-import { Button, Form, Select } from 'antd';
+import {
+  Button, DatePicker, Form, Select,
+} from 'antd';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import locale from 'antd/es/date-picker/locale/zh_CN';
+import moment from 'moment';
 import { getProductList, getHistoryReportList, updateState } from '@/store/reducers/historyReportReducer';
 import { defaultSearchParams } from '../config';
 
@@ -33,14 +37,24 @@ const SearchBar: FunctionComponent<SearchBarProps> = () => {
   }, [productList]);
 
   const onFinish = (values) => {
-    const newSearchParams = { ...searchParams, ...values, page: 1 };
+    const { product_id, rangeDate } = values;
+    let start_time = '';
+    let end_time = '';
+    if (rangeDate) {
+      start_time = moment(rangeDate[0]).format('YYYY-MM-DD HH:mm:ss');
+      end_time = moment(rangeDate[1]).format('YYYY-MM-DD HH:mm:ss');
+    }
+
+    const newSearchParams = {
+      ...searchParams, product_id, start_time, end_time, page: 1,
+    };
     dispatch(updateState({ searchParams: newSearchParams }));
     dispatch(getHistoryReportList(newSearchParams));
   };
 
   const onReset = () => {
     dispatch(updateState({ searchParams: { ...defaultSearchParams, page: 1 } }));
-    form.setFieldsValue(defaultSearchParams);
+    form.setFieldsValue({ ...defaultSearchParams, rangeDate: null });
   };
 
   return (
@@ -55,6 +69,14 @@ const SearchBar: FunctionComponent<SearchBarProps> = () => {
       >
         <Select loading={!productOptions?.length} options={productOptions} />
       </Form.Item>
+      <Form.Item
+        label="报告时间"
+        name="rangeDate"
+        colon={false}
+      >
+        <DatePicker.RangePicker locale={locale} showTime />
+      </Form.Item>
+
       <Form.Item>
         <Button htmlType="submit">
           查询

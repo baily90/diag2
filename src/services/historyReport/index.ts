@@ -8,3 +8,7 @@ export function getHistoryReportListServive({ page, ...params }) {
 export function getProductListServive() {
   return request.get(api.historyReport.getProductList);
 }
+
+export function withdrawReportService(id: number) {
+  return request.post(api.historyReport.withdrawReport(id));
+}

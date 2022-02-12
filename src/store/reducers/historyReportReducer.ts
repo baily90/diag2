@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getProductListServive, getHistoryReportListServive } from '@/services/historyReport';
+import { getProductListServive, getHistoryReportListServive, withdrawReportService } from '@/services/historyReport';
 import { AppDispatch } from '..';
 
 interface HistoryReportState {
@@ -13,7 +13,8 @@ interface HistoryReportState {
     count: number,
     list: []
   },
-  productList: []
+  productList: [],
+  loading: boolean
 }
 
 const initialState: HistoryReportState = {
@@ -28,6 +29,7 @@ const initialState: HistoryReportState = {
     list: [],
   },
   productList: [],
+  loading: true,
 };
 
 export const historyReportSlice = createSlice({
@@ -46,16 +48,36 @@ export const historyReportSlice = createSlice({
 export const { updateState } = historyReportSlice.actions;
 
 export const getProductList = () => async (dispatch: AppDispatch) => {
-  const { data } = await getProductListServive();
-  if (data) {
-    dispatch(updateState({ productList: data }));
+  try {
+    const { data } = await getProductListServive();
+    if (data) {
+      dispatch(updateState({ productList: data }));
+    }
+  } catch (error) {
+    console.log('getProductList异常');
   }
 };
 
 export const getHistoryReportList = (params) => async (dispatch: AppDispatch) => {
-  const { data } = await getHistoryReportListServive(params);
-  if (data) {
-    dispatch(updateState({ dataSource: data }));
+  try {
+    dispatch(updateState({ loading: true }));
+    const { data } = await getHistoryReportListServive(params);
+    if (data) {
+      dispatch(updateState({ dataSource: data }));
+    }
+    dispatch(updateState({ loading: false }));
+  } catch (error) {
+    console.log('getHistoryReportList异常');
+    dispatch(updateState({ loading: false }));
+  }
+};
+
+export const withdrawReport = (id: number) => async (dispatch: AppDispatch) => {
+  try {
+    const res = await withdrawReportService(id);
+    return res;
+  } catch (error) {
+    console.log('withdrawReport异常');
   }
 };
 

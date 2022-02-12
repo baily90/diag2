@@ -10,7 +10,7 @@ export const actions = [
     type: 'link',
   },
   {
-    code: 'cancle',
+    code: 'withdraw',
     name: '撤回',
     type: 'link',
   },
