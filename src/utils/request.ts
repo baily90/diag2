@@ -24,10 +24,13 @@ request.interceptors.request.use(
 request.interceptors.response.use(
   ({ data }) => {
     const { code } = data;
-    if ([400, 40001, 401000000, 403000000].includes(code)) {
+    if ([400, 40001].includes(code)) {
       // token失效
       tokenStorage.clear();
       window.location.href = '/user/login';
+      return null;
+    } if ([401000000, 403000000].includes(code)) {
+      window.location.href = '/';
       return null;
     }
     return data;

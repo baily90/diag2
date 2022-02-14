@@ -1,5 +1,5 @@
-import dynamicFormFields from 'components/form/dynamicFormFields';
-import { FieldType } from 'libs/types/formField';
+import dynamicFormFields from '../dynamicFormFields';
+import { FieldType } from '@/types/formField';
 
 export default function ComplexFields({
   innerForm,

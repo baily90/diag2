@@ -13,7 +13,6 @@ export interface OperateProps {
 const Operate: FunctionComponent<OperateProps> = ({ record, actions }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  // const { searchParams } = useSelector(({ autoTest }: any) => ({ ...autoTest }));
 
   const detail = () => {
     const { id } = record;
