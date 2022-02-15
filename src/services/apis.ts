@@ -28,5 +28,10 @@ export default {
     login: '/diag_doctor/login',
     sendSms: '/diag_doctor/send_sms',
     resetPassword: '/diag_doctor/find_pass',
+    changePassword: '/diag_doctor/change_password',
+  },
+  patientCase: {
+    getCaseList: '/diag_doctor/patient/report-list',
+    getCaseDetail: '/diag_doctor/report/detail',
   },
 };

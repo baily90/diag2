@@ -12,6 +12,7 @@ import ReportRuleButton from '@/components/ReportRuleButton';
 import DangerCheckbox from '@/components/DangerCheckbox';
 import DestoryReportButton from '@/components/DestoryReportButton';
 import './index.less';
+import PatientCaseButton from '@/components/PatientCaseButton';
 
 interface ReportHeaderProps {
 
@@ -44,7 +45,7 @@ const ReportHeader: FunctionComponent<ReportHeaderProps> = () => {
       <div className="hospitalName">
         明医众禾（青岛附属医院）互联网医院
         <Spin spinning={!base.name}>
-          <DropdownButton>
+          <DropdownButton position="report">
             <Button type="text">
               <Avatar size={25} icon={<UserOutlined />} src={base.avator} />
               <span style={{ color: '#fff', marginLeft: '5px' }}>{base.name}</span>
@@ -96,13 +97,7 @@ const ReportHeader: FunctionComponent<ReportHeaderProps> = () => {
             {/* 患者历史病例 */}
             {patientReport === 1 && (
               <Col>
-                <Button
-                  className="btn-normal"
-                // loading={isLoading}
-                // onClick={showPatienCase}
-                >
-                  历史病例
-                </Button>
+                <PatientCaseButton />
               </Col>
             )}
             {/* 作废报告 */}

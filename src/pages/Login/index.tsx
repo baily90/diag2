@@ -69,11 +69,11 @@ const Login: FunctionComponent<LoginProps> = () => {
       } else {
         passwordStorage.clear();
       }
+      message.success(msg);
       setTimeout(() => {
         navigate(redirect, { replace: true });
       });
     } else {
-      message.error(msg);
       getCaptchaImage();
     }
   };

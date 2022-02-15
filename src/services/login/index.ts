@@ -16,3 +16,7 @@ export function sendSmsService(phone: string) {
 export function resetPasswordService(data) {
   return request.post(api.login.resetPassword, data);
 }
+
+export function changePasswordService(data) {
+  return request.post(api.login.changePassword, data);
+}

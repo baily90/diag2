@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
+  changePasswordService,
   getCaptchaService, loginService, resetPasswordService, sendSmsService,
 } from '@/services/login';
 import { AppDispatch } from '..';
@@ -63,6 +64,15 @@ export const sendSms = (phone: string) => async () => {
 export const resetPassword = (resetData) => async () => {
   try {
     const res = await resetPasswordService(resetData);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const changePassword = (data) => async () => {
+  try {
+    const res = await changePasswordService(data);
     return res;
   } catch (error) {
     console.log(error);
