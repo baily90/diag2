@@ -76,7 +76,7 @@ const ReportHeader: FunctionComponent<ReportHeaderProps> = () => {
             {/* 疑难报告 */}
             {
               ((!is_history && !is_withdraw)
-                || (is_history && is_danger)) && (
+                || (is_history && !!is_danger)) && (
                 <Col>
                   <DangerCheckbox />
                 </Col>

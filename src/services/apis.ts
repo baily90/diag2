@@ -18,4 +18,15 @@ export default {
     getProductList: '/diag_doctor/product/list',
     withdrawReport: (id: number) => `/diag_doctor/withdraw/${id}`,
   },
+  home: {
+    getHomeInfo: '/diag_doctor/report_mixed',
+    makeOnline: '/diag_doctor/make_online',
+    mineCheckWant: '/diag_doctor/mine_check_want',
+  },
+  login: {
+    getCaptcha: '/diag_doctor/captcha_center',
+    login: '/diag_doctor/login',
+    sendSms: '/diag_doctor/send_sms',
+    resetPassword: '/diag_doctor/find_pass',
+  },
 };

@@ -50,6 +50,9 @@ const BasicLayout: FunctionComponent<BasicLayoutProps> = () => {
       </Sider>
       <Content className="site-content">
         <Outlet />
+        <div className="site-content-copyright">
+          Copyright @ 深至科技诊断医师平台
+        </div>
       </Content>
     </Layout>
   );
