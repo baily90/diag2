@@ -45,7 +45,7 @@ const BasicLayout: FunctionComponent<BasicLayoutProps> = () => {
           </Menu.Item>
         </Menu>
         <div className="rulesButton">
-          <ReportRuleButton shape="round" />
+          <ReportRuleButton shape="round" type="primary" />
         </div>
       </Sider>
       <Content className="site-content">
