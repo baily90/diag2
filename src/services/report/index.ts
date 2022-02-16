@@ -36,3 +36,7 @@ export function cancleReportService(diag_id: number) {
 export function continueReportService(diag_id: number) {
   return request.post(api.report.continueReport, { diag_id });
 }
+
+export function getMarkDataService(diag_id: number) {
+  return request.get(api.report.getMarkData, { params: { report_id: diag_id } });
+}

@@ -12,6 +12,7 @@ export default {
     destroyReport: '/diag_doctor/check_nullify',
     cancleReport: '/diag_doctor/cancel/diag',
     continueReport: '/diag_doctor/continue/diag',
+    getMarkData: '/diag_doctor/mark/data',
   },
   historyReport: {
     getHistoryReportList: (page: number) => `/diag_doctor/report_list/${page}`,

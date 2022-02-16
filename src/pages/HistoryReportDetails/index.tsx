@@ -2,11 +2,12 @@ import { FunctionComponent, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import parseInt from 'lodash/parseInt';
 import { useDispatch, useSelector } from 'react-redux';
+import { Skeleton } from 'antd';
 import { getReportDetailInfo } from '@/store/reducers/reportReducer';
 import ReportDetailContent from './components/ReportDetailContent';
-import './index.less';
-import { Skeleton } from 'antd';
 import { RootState } from '@/store';
+import ReportDetailDicom from './components/ReportDetailDicom';
+import './index.less';
 
 interface HistoryReportDetailsProps {
 
@@ -26,7 +27,7 @@ const HistoryReportDetails: FunctionComponent<HistoryReportDetailsProps> = () =>
     <div className="historyReportDetail-container">
       <Skeleton loading={is_loading} active paragraph={{ rows: 6 }}>
         <div className="reportDetail-source">
-          source-area
+          <ReportDetailDicom />
         </div>
         <ReportDetailContent />
       </Skeleton>

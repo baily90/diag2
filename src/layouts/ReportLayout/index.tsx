@@ -12,7 +12,7 @@ const ReportLayout: FunctionComponent<ReportLayoutProps> = () => {
   return (
     <div className="ReportLayout-container">
       <ReportHeader />
-      <div className="report">
+      <div className="ReportLayout-report">
         <Outlet />
       </div>
     </div>

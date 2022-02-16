@@ -9,6 +9,7 @@ import {
   destroyReportService,
   continueReportService,
   cancleReportService,
+  getMarkDataService,
 } from '@/services/report/index';
 import { AppDispatch } from '..';
 
@@ -36,7 +37,9 @@ interface ReportState {
   },
   remain_time: number, // 报告剩余处理时间
   position_info: object, // 左右侧颈动脉内中膜厚度
-  destoryTypes: [] // 作废报告类型
+  destoryTypes: [], // 作废报告类型
+  mark_data: [], // 标注信息
+  templateData: [] // 报告模板
 }
 
 const initialState: ReportState = {
@@ -64,6 +67,8 @@ const initialState: ReportState = {
   remain_time: 600,
   position_info: {},
   destoryTypes: [],
+  mark_data: [],
+  templateData: [],
 };
 
 export const reportSlice = createSlice({
@@ -124,8 +129,11 @@ export const getEditReportInfo = (check_id: number) => async (dispatch: AppDispa
           product_name: check?.product_name,
           create_time: check?.create_time,
         },
-        position_info,
         remain_time,
+        position_info,
+        destoryTypes: [],
+        mark_data: [],
+        templateData: [],
       };
       dispatch(updateState(obj));
       dispatch(updateState({ is_loading: false }));
@@ -170,8 +178,11 @@ export const getReportDetailInfo = (diag_id: number) => async (dispatch: AppDisp
           product_name,
           create_time: check?.create_time,
         },
-        position_info: {},
         remain_time: 600,
+        position_info: {},
+        destoryTypes: [],
+        mark_data: [],
+        templateData: [],
       };
       dispatch(updateState(obj));
       dispatch(updateState({ is_loading: false }));
@@ -268,6 +279,22 @@ export const cancleReport = (diag_id: number) => async () => {
   try {
     const res = await cancleReportService(diag_id);
     return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+/**
+ * 获取测量的数据
+ * @param diag_id
+ * @returns
+ */
+export const getMarkData = (diag_id: number) => async (dispatch: AppDispatch) => {
+  try {
+    const { code, data } = await getMarkDataService(diag_id);
+    if (code === 200) {
+      dispatch(updateState({ mark_data: (data?.mark_data) || [] }));
+    }
   } catch (error) {
     console.log(error);
   }
