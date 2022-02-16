@@ -1,5 +1,15 @@
 .site-layout {
   height: 100vh;
+  :global {
+    .ant-menu-dark.ant-menu-dark:not(.ant-menu-horizontal)
+      .ant-menu-item-selected {
+      background-color: #333;
+    }
+    .ant-menu.ant-menu-dark .ant-menu-item-selected,
+    .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
+      background-color: #333;
+    }
+  }
 }
 .userInfo {
   display: 'inline-flex';
@@ -15,12 +25,13 @@
 }
 .site-content {
   position: relative;
+  background-color: #001529;
   .site-content-copyright {
     position: absolute;
     left: 50%;
     bottom: 20px;
     text-align: center;
-    color: #aaa;
+    color: #555;
     transform: translateX(-50%);
   }
 }

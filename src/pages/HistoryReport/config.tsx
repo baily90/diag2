@@ -1,5 +1,4 @@
 import { ColumnsType } from 'antd/lib/Table';
-import { FieldType } from '@/types/formField';
 import Operate from './components/Operate';
 
 // 操作按钮
@@ -22,7 +21,7 @@ export const columns: ColumnsType<any> = [
     title: '报告ID',
     dataIndex: 'id',
     key: 'id',
-    width: 100,
+    width: 80,
   },
   {
     title: '报告产品',
@@ -40,7 +39,7 @@ export const columns: ColumnsType<any> = [
     title: '患者年龄',
     dataIndex: 'patient_age',
     key: 'patient_age',
-    width: 100,
+    width: 80,
   },
   {
     title: '报告发送时间',

@@ -24,6 +24,15 @@ export default defineConfig({
     outDir: 'build',
   },
   css: {
+    preprocessorOptions: {
+      less: {
+        modifyVars: {
+          'primary-color': '#169bd5',
+          // 'table-bg': 'transparent',
+        },
+        javascriptEnabled: true,
+      },
+    },
     postcss: {
       plugins: [
         require('autoprefixer')({
@@ -36,6 +45,7 @@ export default defineConfig({
           // ]
         }),
       ],
+
     },
   },
 });

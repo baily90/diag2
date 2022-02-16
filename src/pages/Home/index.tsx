@@ -30,7 +30,12 @@ const Home: FunctionComponent<HomeProps> = () => {
   };
   return (
     <div className="home-container">
-      <Card style={{ width: '80%', padding: 20, margin: '50px auto 0' }}>
+      <Card
+        bordered={false}
+        style={{
+          width: '90%', padding: 40, margin: '50px auto 0', color: '#fff', backgroundColor: '#555',
+        }}
+      >
         <div className="center">
           <div className="need2DealBox">
             已有
@@ -42,25 +47,25 @@ const Home: FunctionComponent<HomeProps> = () => {
             份报告等待处理
           </div>
           <div className="btn-wrap">
-            <Button shape="round" size="large" block onClick={handleGo2EditReport}>继续处理</Button>
+            <Button type="primary" shape="round" size="large" block onClick={handleGo2EditReport}>继续处理</Button>
           </div>
         </div>
       </Card>
-      <Row gutter={10} style={{ width: '80%', margin: '20px auto 0' }}>
+      <Row gutter={10} style={{ width: '90%', margin: '20px auto 0' }}>
         <Col span={8}>
-          <Card className="center" bordered={false}>
+          <Card className="center cardBox" bordered={false}>
             <div className="center">{count6}</div>
             <div className="label">今日已处理报告数</div>
           </Card>
         </Col>
         <Col span={8}>
-          <Card className="center" bordered={false}>
+          <Card className="center cardBox" bordered={false}>
             <div className="center">{count4}</div>
             <div className="label">本月累计报告数</div>
           </Card>
         </Col>
         <Col span={8}>
-          <Card className="center" bordered={false}>
+          <Card className="center cardBox" bordered={false}>
             <div className="center">{count5}</div>
             <div className="label">累计全部报告数</div>
           </Card>
