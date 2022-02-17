@@ -4,11 +4,12 @@ import AuthLayout from '@/layouts/AuthLayout';
 import UserLayout from '@/layouts/UserLayout';
 import BasicLayout from '@/layouts/BasicLayout';
 import ReportLayout from '@/layouts/ReportLayout';
+import HistoryReportDetails from '@/pages/HistoryReportDetails';
 
 const Home = lazy(() => import('@/pages/Home'));
 const EditReport = lazy(() => import('@/pages/EditReport'));
 const HistoryReport = lazy(() => import('@/pages/HistoryReport'));
-const HistoryReportDetails = lazy(() => import('@/pages/HistoryReportDetails'));
+
 const Login = lazy(() => import('@/pages/Login'));
 const ResetPassword = lazy(() => import('@/pages/ResetPassword'));
 const NotFound = lazy(() => import('@/pages/NotFound'));

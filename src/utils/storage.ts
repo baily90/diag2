@@ -92,3 +92,4 @@ export default class Storage {
 
 export const passwordStorage = new Storage('@passwordStorage');
 export const tokenStorage = new Storage('@tokenStorage');
+export const ossStorage = new Storage('@ossStorage');

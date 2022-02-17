@@ -28,7 +28,7 @@ export default defineConfig({
       less: {
         modifyVars: {
           'primary-color': '#169bd5',
-          // 'table-bg': 'transparent',
+          'layout-header-background': '#000',
         },
         javascriptEnabled: true,
       },

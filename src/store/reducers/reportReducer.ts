@@ -10,6 +10,7 @@ import {
   continueReportService,
   cancleReportService,
   getMarkDataService,
+  handleReportService,
 } from '@/services/report/index';
 import { AppDispatch } from '..';
 
@@ -108,6 +109,12 @@ export const getEditReportInfo = (check_id: number) => async (dispatch: AppDispa
         position_info,
         remain_time,
       } = data;
+
+      const newSources = sources?.map((item) => {
+        const isVedioFlag = ['视频', 2].includes(item.source_type);
+        item.littleImg = isVedioFlag ? item.source_url_snapshot : item.source_url;
+        return item;
+      });
       const obj = {
         is_history: false,
         diag_id,
@@ -116,7 +123,7 @@ export const getEditReportInfo = (check_id: number) => async (dispatch: AppDispa
         is_withdraw, // 是否是撤回报告 0:正常报告，1:撤回报告
         nullifyAccess, // 是否有作废权限
         body_region_id: check?.body_region_id, // 部位id
-        sources, // 资源
+        sources: newSources, // 资源
         ai_source: [],
         scan_comment, // 扫查留言
         patientReport, // 是否显示患者历史病例 0:不显示,1:显示
@@ -157,6 +164,16 @@ export const getReportDetailInfo = (diag_id: number) => async (dispatch: AppDisp
       const {
         check, patient, source, patientReport, report_detail_html, ai_source, product_name,
       } = data;
+      const newSources = source?.map((item) => {
+        const isVedioFlag = ['视频', 2].includes(item.source_type);
+        item.littleImg = isVedioFlag ? item.source_url_snapshot : item.source_url;
+        return item;
+      });
+      const newAISources = ai_source?.map((item) => {
+        const isVedioFlag = ['视频', 2].includes(item.source_type);
+        item.littleImg = isVedioFlag ? item.source_url_snapshot : item.source_url;
+        return item;
+      });
       const obj = {
         is_history: true,
         diag_id,
@@ -165,8 +182,8 @@ export const getReportDetailInfo = (diag_id: number) => async (dispatch: AppDisp
         is_withdraw: 0, // 是否是撤回报告 0:正常报告，1:撤回报告
         nullifyAccess: 0, // 是否有作废权限
         body_region_id: check?.body_region_id, // 部位id
-        sources: source, // 资源
-        ai_source,
+        sources: newSources, // 资源
+        ai_source: newAISources,
         scan_comment: {}, // 扫查留言
         patientReport, // 是否显示患者历史病例 0:不显示,1:显示
         report_detail_html, // 报告详情dom文本
@@ -208,7 +225,7 @@ export const getNextReport = (diag_id: number) => async () => {
 };
 
 /**
- * 转交给其他人
+ * 转交给其他人并获取下一份报告
  * @param check_id
  * @returns
  */
@@ -219,6 +236,20 @@ export const handToOthers = (check_id: number) => async () => {
       const res = await nextNeedReportService(check_id);
       return res;
     }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+/**
+ * 获取需要处理的下一份报告
+ * @param check_id
+ * @returns
+ */
+export const nextNeedReport = (check_id: number) => async () => {
+  try {
+    const res = await nextNeedReportService(check_id);
+    return res;
   } catch (error) {
     console.log(error);
   }
@@ -295,6 +326,15 @@ export const getMarkData = (diag_id: number) => async (dispatch: AppDispatch) =>
     if (code === 200) {
       dispatch(updateState({ mark_data: (data?.mark_data) || [] }));
     }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const handleReport = (data) => async () => {
+  try {
+    const res = await handleReportService(data);
+    return res;
   } catch (error) {
     console.log(error);
   }

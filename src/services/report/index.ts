@@ -40,3 +40,11 @@ export function continueReportService(diag_id: number) {
 export function getMarkDataService(diag_id: number) {
   return request.get(api.report.getMarkData, { params: { report_id: diag_id } });
 }
+
+export function sendMarkDataService(data) {
+  return request.post(api.report.getMarkData, data);
+}
+
+export function handleReportService(data) {
+  return request.post(api.report.handleReport, data);
+}

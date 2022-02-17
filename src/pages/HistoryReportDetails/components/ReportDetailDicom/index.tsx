@@ -2,10 +2,11 @@ import { FunctionComponent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import parseInt from 'lodash/parseInt';
-// import DicomJsx from '@/components/Dicom';
+import DicomJsx from '@/components/Dicom';
 import { RootState } from '@/store';
 import { getMarkData } from '@/store/reducers/reportReducer';
-import './index.less';
+import CheckImageContextProvider from '@/components/Dicom/context/checkImageProvider';
+import RecordDicomPaintProvider from '@/components/Dicom/context/recordDicomPaint';
 
 interface ReportDetailDicomProps {
 
@@ -54,8 +55,11 @@ const ReportDetailDicom: FunctionComponent<ReportDetailDicomProps> = () => {
   }, [ai_source, sources, mark_data]);
 
   return (
-    <>DicomJsx</>
-    // <DicomJsx disabled dicomLists={sourceList} />
+    <CheckImageContextProvider>
+      <RecordDicomPaintProvider>
+        <DicomJsx disabled dicomLists={sourceList} />
+      </RecordDicomPaintProvider>
+    </CheckImageContextProvider>
   );
 };
 
