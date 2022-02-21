@@ -13,6 +13,8 @@ const ParamsContext = createContext<{
   setUpdatePath: Dispatch<string>;
   checkImages: paramsType | [];
   setCheckImages: Dispatch<paramsType | []>;
+  activedDicomId: number,
+  setActivedDicomId: Dispatch<number>;
 } | null>(null);
 
 ParamsContext.displayName = 'checkImage';
@@ -20,6 +22,7 @@ ParamsContext.displayName = 'checkImage';
 const CheckImageContextProvider = ({ children }: { children: ReactNode }) => {
   const [checkImages, setCheckImages] = useState<paramsType | []>([]);
   const [updateStatePath, setUpdatePath] = useState<string>('');
+  const [activedDicomId, setActivedDicomId] = useState(-1);
   return (
     <ParamsContext.Provider
       value={{
@@ -27,6 +30,8 @@ const CheckImageContextProvider = ({ children }: { children: ReactNode }) => {
         setCheckImages,
         updateStatePath,
         setUpdatePath,
+        activedDicomId,
+        setActivedDicomId,
       }}
     >
       {children}

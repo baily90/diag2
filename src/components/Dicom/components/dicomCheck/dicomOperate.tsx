@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { saveImageToOss } from '@/utils/oss';
 import { useCheckImageContext } from '../../context/checkImageProvider';
 import { RootState } from '@/store';
+import { updateState } from '@/store/reducers/reportReducer';
 
 const ButtonJsx = ({
   activeMode,
@@ -82,14 +83,14 @@ const DicomOperate = ({
   const [tagDes, setTagDes] = useState('');
 
   const {
+    sources,
     scan_comment,
     templateData,
     body_region_id,
   } = useSelector((state: RootState) => state.report);
-  // const { dealCheck } = useSelector(({ dealCheck }: any) => ({ dealCheck }));
-  // const { scan_comment } = dealCheck;
-  // const { updateStatePath } = useCheckImageContext();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
+
+  const { activedDicomId } = useCheckImageContext();
 
   // 获取扫查标签
   const getScanTags = (scan_comment: any) => {
@@ -131,7 +132,29 @@ const DicomOperate = ({
     const imgBase64 = canvas.toDataURL({ format: 'png' });
 
     saveImageToOss(imgBase64, (res) => {
-      console.log(res);
+      const currentSource = sources.filter((item) => {
+        if (item.id === activedDicomId) {
+          return item;
+        }
+      })?.[0];
+      let source = {};
+      if (currentSource) {
+        source = { ...currentSource };
+      }
+      console.log(currentSource);
+
+      source = {
+        ...source,
+        id: new Date().getTime(),
+        parent_id: currentSource?.id,
+        mm_per_pixel: 0,
+        source_type: 1,
+        source_url: res,
+        source_url_snapshot: res,
+        littleImg: res,
+        isScreenShot: true,
+      };
+      dispatch(updateState({ sources: [...sources, source] }));
 
       setLoading(false);
       message.success('截屏成功');
@@ -220,7 +243,7 @@ const DicomOperate = ({
           </Tooltip>
         </div>
       )}
-      {!disabled && body_region_id == 7 && (
+      {!disabled && body_region_id === 7 && (
         <div style={{ marginLeft: '7%' }}>
           <Dropdown overlay={getTemplateMenu()} trigger={['click']}>
             <Button type="dashed">报告模板</Button>

@@ -40,7 +40,7 @@ interface ReportState {
   position_info: object, // 左右侧颈动脉内中膜厚度
   destoryTypes: [], // 作废报告类型
   mark_data: [], // 标注信息
-  templateData: [] // 报告模板
+  templateData: [], // 报告模板
 }
 
 const initialState: ReportState = {

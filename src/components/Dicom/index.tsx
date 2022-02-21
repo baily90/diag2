@@ -3,6 +3,7 @@ import get from 'lodash/get';
 import DicomsList from './components/list';
 import DicomCheck from './components/dicomCheck';
 import './index.less';
+import { useCheckImageContext } from './context/checkImageProvider';
 
 const DicomJsx = ({
   dicomLists,
@@ -20,6 +21,7 @@ const DicomJsx = ({
   }>;
   disabled?: boolean;
 }) => {
+  const { setActivedDicomId } = useCheckImageContext();
   const [listsData, setListsData] = useState<Array<any>>([]);
   const [index, setIndex] = useState<number>(0);
   const [actived, setActived] = useState<number>(-1);
@@ -33,8 +35,11 @@ const DicomJsx = ({
       markData?: {};
     }> = [];
     dicomLists.forEach((item) => arr.push(...item.lists));
-    const id = get(dicomLists, '0.lists[0].id', -1);
-    setActived(id);
+    if (actived === -1) {
+      const id = get(arr, '0.id', -1);
+      setActived(id);
+      setActivedDicomId(id);
+    }
     setListsData(arr);
   }, [dicomLists]);
 
@@ -42,6 +47,7 @@ const DicomJsx = ({
     const index = listsData.findIndex((item) => item.id === e);
     setActived(e);
     setIndex(index);
+    setActivedDicomId(e);
   };
 
   return (

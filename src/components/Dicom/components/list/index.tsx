@@ -26,6 +26,8 @@ const DicomsList = ({
     getDicomById(id);
   };
   const onChange = (e: any) => {
+    console.log(e);
+
     if (e.length > 4) {
       message.info('报告中不能超过4张图片发送给患者');
     } else {
