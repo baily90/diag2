@@ -775,6 +775,30 @@ export const BreastCouList = [
   ...breastComplex,
 ];
 
+// 肠系膜淋巴结超声提示
+export const mesareicList = [
+  {
+    label: '',
+    value: '1',
+    txt: '肠系膜未见明显淋巴结回声',
+  },
+  {
+    label: '',
+    value: '2',
+    txt: '肠系膜淋巴结可见',
+  },
+  {
+    label: '',
+    value: '3',
+    txt: '肠系膜淋巴结肿大',
+  },
+  {
+    label: '',
+    value: '4',
+    txt: '恶性肠系膜淋巴结',
+  },
+];
+
 export {
   soundThyNormal,
   soundThyAndNodule,

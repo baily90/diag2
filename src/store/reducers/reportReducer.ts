@@ -41,7 +41,7 @@ interface ReportState {
   destoryTypes: [], // 作废报告类型
   mark_data: [], // 标注信息
   templateData: [], // 报告模板
-  signImg: '' // 医生签名
+  signImg: '', // 医生签名
 }
 
 const initialState: ReportState = {

@@ -25,10 +25,8 @@ const Operate: FunctionComponent<OperateProps> = ({ record, actions }) => {
         content: '撤回后报告需重新出具',
         okText: '确认出具',
       }, async () => {
-        const { code, msg, data } = await dispatch(withdrawReport(id));
-        if (code !== 200) {
-          message.error(msg);
-        } else {
+        const { code, data } = await dispatch(withdrawReport(id));
+        if (code === 200) {
           const { is_check, check_id } = data;
           if (is_check) {
             navigate(`/editReport/${check_id}`, { replace: true });

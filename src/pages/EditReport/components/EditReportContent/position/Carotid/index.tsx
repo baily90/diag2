@@ -2,7 +2,7 @@ import {
   ReactNode, FunctionComponent, useEffect, useState,
 } from 'react';
 import {
-  Tabs, Form, Button, message,
+  Tabs, Form, Button, message, FormInstance,
 } from 'antd';
 import _ from 'lodash';
 // import CompDoctorSign from 'components/CompDoctorSign';
@@ -18,20 +18,33 @@ import CompDoctorSign from '@/components/CompDoctorSign';
 const { TabPane } = Tabs;
 
 interface CarotidProps {
+  forms: FormInstance[],
   defaultData?: {
     [key: string]: string;
   };
+  firstLevelActiveKey: string,
+  setFirstLevelActiveKey: (val: string) => void,
+  secondLevelActiveKey: string,
+  setSecondLevelActiveKey: (val: string) => void,
+  validateCSSJFields: () => void
 }
 
-const Carotid: FunctionComponent<CarotidProps> = ({ defaultData }) => {
-  const [formLeft] = Form.useForm();
-  const [formRight] = Form.useForm();
-  const [formRemark] = Form.useForm();
-  const [formCSTS] = Form.useForm();
-  const [formJKJY] = Form.useForm();
+const Carotid: FunctionComponent<CarotidProps> = ({
+  defaultData,
+  forms,
+  firstLevelActiveKey,
+  setFirstLevelActiveKey,
+  secondLevelActiveKey,
+  setSecondLevelActiveKey,
+  validateCSSJFields,
+}) => {
+  const [formLeft, formRight, formRemark, formCSTS, formJKJY] = forms;
 
-  const [firstLevelActiveKey, setFirstLevelActiveKey] = useState('cssj');
-  const [secondLevelActiveKey, setSecondLevelActiveKey] = useState('left');
+  useEffect(() => {
+    _.merge(normalData, defaultData);
+    formLeft.setFieldsValue(defaultData);
+    formRight.setFieldsValue(defaultData);
+  }, [defaultData]);
 
   const normalData = {
     tabs: {
@@ -60,7 +73,7 @@ const Carotid: FunctionComponent<CarotidProps> = ({ defaultData }) => {
   const handler = (e: any) => {
     if (e.origin !== origin) return;
     console.log('mesFromReact', e?.data);
-    const { type, data } = e?.data;
+    const { type } = e?.data;
     if (type === 'onekeyNormal') {
       formLeft.resetFields();
       formRight.resetFields();
@@ -73,68 +86,6 @@ const Carotid: FunctionComponent<CarotidProps> = ({ defaultData }) => {
       formCSTS.setFieldsValue(normalData);
       formJKJY.setFieldsValue(normalData);
       setFirstLevelActiveKey('ysqm');
-    } else if (type === 'getSignImg') {
-      setSignImg(data?.url);
-    }
-  };
-
-  useEffect(() => {
-    _.merge(normalData, defaultData);
-    formLeft.setFieldsValue(defaultData);
-    formRight.setFieldsValue(defaultData);
-  }, []);
-
-  /**
-  * 超声所见校验器
-  * 所有校验通过通知父窗口预览报告
-  */
-  const validateCSSJFields = async () => {
-    try {
-      await formLeft.validateFields();
-      try {
-        await formRight.validateFields();
-        try {
-          await formCSTS.validateFields();
-          try {
-            await formJKJY.validateFields();
-
-            if (signImg) {
-              const data = {};
-              let { cs_tip_des, cs_tips } = formCSTS.getFieldsValue();
-              cs_tips = transformData(
-                formCSTS.getFieldsValue(),
-                transformSubmitDataConfig,
-              ).cs_tips;
-              cs_tips = cs_tips.filter((item: any) => !!item);
-
-              _.merge(
-                data,
-                formLeft.getFieldsValue(),
-                formRight.getFieldsValue(),
-                formRemark.getFieldsValue(),
-                formJKJY.getFieldsValue(),
-                { cs_tip_des, cs_tips },
-              );
-
-              window.parent
-                && window.parent.postMessage({ type: 'previewReport', data }, '*');
-            } else {
-              message.warning('请先确认签名');
-            }
-            setFirstLevelActiveKey('ysqm');
-          } catch (error) {
-            setFirstLevelActiveKey('jkjy');
-          }
-        } catch (error) {
-          setFirstLevelActiveKey('csts');
-        }
-      } catch (error) {
-        setFirstLevelActiveKey('cssj');
-        setSecondLevelActiveKey('right');
-      }
-    } catch (error) {
-      setFirstLevelActiveKey('cssj');
-      setSecondLevelActiveKey('left');
     }
   };
 

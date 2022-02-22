@@ -100,6 +100,25 @@ const caPlaqueLose: DEFINE.radioListTypes[] = [
   },
 ];
 
+const specialList: any[] = [
+  {
+    name: 'intimal_thickness',
+    unit: ' mm',
+  },
+  {
+    name: 'peak_systolic_velocity',
+  },
+  {
+    name: 'pulsatility_index',
+  },
+  {
+    name: 'resistance_index',
+  },
+  {
+    name: 'heart_rate',
+  },
+];
+
 export {
   IsShow,
   caInner,
@@ -108,4 +127,5 @@ export {
   caPipeSound,
   caPlaqueSound,
   caPlaqueLose,
+  specialList,
 };
