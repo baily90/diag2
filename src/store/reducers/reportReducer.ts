@@ -41,6 +41,7 @@ interface ReportState {
   destoryTypes: [], // 作废报告类型
   mark_data: [], // 标注信息
   templateData: [], // 报告模板
+  signImg: '' // 医生签名
 }
 
 const initialState: ReportState = {
@@ -70,6 +71,7 @@ const initialState: ReportState = {
   destoryTypes: [],
   mark_data: [],
   templateData: [],
+  signImg: '',
 };
 
 export const reportSlice = createSlice({
@@ -141,6 +143,7 @@ export const getEditReportInfo = (check_id: number) => async (dispatch: AppDispa
         destoryTypes: [],
         mark_data: [],
         templateData: [],
+        signImg: '',
       };
       dispatch(updateState(obj));
       dispatch(updateState({ is_loading: false }));
@@ -200,6 +203,7 @@ export const getReportDetailInfo = (diag_id: number) => async (dispatch: AppDisp
         destoryTypes: [],
         mark_data: [],
         templateData: [],
+        signImg: '',
       };
       dispatch(updateState(obj));
       dispatch(updateState({ is_loading: false }));
@@ -330,7 +334,11 @@ export const getMarkData = (diag_id: number) => async (dispatch: AppDispatch) =>
     console.log(error);
   }
 };
-
+/**
+ * 发送报告
+ * @param data
+ * @returns
+ */
 export const handleReport = (data) => async () => {
   try {
     const res = await handleReportService(data);
@@ -338,6 +346,15 @@ export const handleReport = (data) => async () => {
   } catch (error) {
     console.log(error);
   }
+};
+
+/**
+ * 获取签章
+ * @returns
+ */
+export const getSignImg = () => (dispatch: AppDispatch, getState: any) => {
+  const signImg = getState().user?.info?.autograph;
+  dispatch(updateState({ signImg }));
 };
 
 export default reportSlice.reducer;
