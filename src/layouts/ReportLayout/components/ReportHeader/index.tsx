@@ -4,15 +4,18 @@ import {
 } from 'antd';
 import { FunctionComponent } from 'react';
 import moment from 'moment';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import clone from 'lodash/clone';
 import DropdownButton from '@/components/DropdownButton';
 import { RootState } from '@/store';
 import { AgeUnitEnum, GenderEnum } from '@/types/patient';
 import ReportRuleButton from '@/components/ReportRuleButton';
 import DangerCheckbox from '@/components/DangerCheckbox';
 import DestoryReportButton from '@/components/DestoryReportButton';
-import './index.less';
 import PatientCaseButton from '@/components/PatientCaseButton';
+import { updateState } from '@/store/reducers/reportReducer';
+import normalData from '@/constants/normalData';
+import './index.less';
 
 interface ReportHeaderProps {
 
@@ -20,6 +23,7 @@ interface ReportHeaderProps {
 
 const ReportHeader: FunctionComponent<ReportHeaderProps> = () => {
   console.log('ReportHeader');
+  const dispatch = useDispatch();
   const { base } = useSelector((state: RootState) => state.user);
   const {
     patient,
@@ -38,6 +42,13 @@ const ReportHeader: FunctionComponent<ReportHeaderProps> = () => {
   const formatDateTime = (val: number) => {
     if (!val) return '';
     return moment(val * 1000).format('YYYY-MM-DD HH:mm:ss');
+  };
+
+  /**
+   * 一键正常
+   */
+  const onkeyNormal = () => {
+    dispatch(updateState({ normalData: clone(normalData[body_region_id]) }));
   };
 
   return (
@@ -88,7 +99,7 @@ const ReportHeader: FunctionComponent<ReportHeaderProps> = () => {
               <Col>
                 <Button
                   className="btn-normal"
-                // onClick={onkeyNormal}
+                  onClick={onkeyNormal}
                 >
                   全部正常
                 </Button>

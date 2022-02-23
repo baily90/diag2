@@ -6,13 +6,12 @@ import {
 } from 'antd';
 import _ from 'lodash';
 // import CompDoctorSign from 'components/CompDoctorSign';
-import DynamicForm, { transformData } from '@/components/DynamicForm';
+import DynamicForm from '@/components/DynamicForm';
 import {
   left, right, remark, csts, jkjy,
 } from '../../formConfig/carotid';
 import { submitType } from '@/types/formField';
 import styles from '../index.module.less';
-import { transformSubmitDataConfig } from '../../formConfig/carotid/csts';
 import CompDoctorSign from '@/components/CompDoctorSign';
 
 const { TabPane } = Tabs;
@@ -22,6 +21,7 @@ interface CarotidProps {
   defaultData?: {
     [key: string]: string;
   };
+  normalData: object,
   firstLevelActiveKey: string,
   setFirstLevelActiveKey: (val: string) => void,
   secondLevelActiveKey: string,
@@ -31,6 +31,7 @@ interface CarotidProps {
 
 const Carotid: FunctionComponent<CarotidProps> = ({
   defaultData,
+  normalData,
   forms,
   firstLevelActiveKey,
   setFirstLevelActiveKey,
@@ -41,40 +42,13 @@ const Carotid: FunctionComponent<CarotidProps> = ({
   const [formLeft, formRight, formRemark, formCSTS, formJKJY] = forms;
 
   useEffect(() => {
-    _.merge(normalData, defaultData);
     formLeft.setFieldsValue(defaultData);
     formRight.setFieldsValue(defaultData);
   }, [defaultData]);
 
-  const normalData = {
-    tabs: {
-      left: {
-        not_show: 0,
-        intimal_surface: 1,
-        intimal_thickness: '',
-        intimal_echoes: 1,
-        luminal_patch: 1,
-        blood_flow: 0,
-      },
-      right: {
-        not_show: 0,
-        intimal_surface: 1,
-        intimal_thickness: '',
-        intimal_echoes: 1,
-        luminal_patch: 1,
-        blood_flow: 0,
-      },
-    },
-    csts: [0],
-    cs_tips: ['63'],
-    health_proposal: 0,
-  };
-
-  const handler = (e: any) => {
-    if (e.origin !== origin) return;
-    console.log('mesFromReact', e?.data);
-    const { type } = e?.data;
-    if (type === 'onekeyNormal') {
+  useEffect(() => {
+    if (normalData) {
+      _.merge(normalData, defaultData);
       formLeft.resetFields();
       formRight.resetFields();
       formRemark.resetFields();
@@ -87,7 +61,7 @@ const Carotid: FunctionComponent<CarotidProps> = ({
       formJKJY.setFieldsValue(normalData);
       setFirstLevelActiveKey('ysqm');
     }
-  };
+  }, [normalData]);
 
   const onFormRemarkConfirm = async (...args: submitType) => {
     const [value, suc, error] = args;

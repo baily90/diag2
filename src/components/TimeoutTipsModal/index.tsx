@@ -28,7 +28,7 @@ const TimeoutTipsModal: FunctionComponent<TimeoutTipsModalProps> = () => {
   );
 
   const [timerOut, setTimerOut] = useState(0);
-
+  const [remainCountDown, setRemail];
   useEffect(() => {
     // setTimerOut(remain_time - 50);
     setTimerOut(10);

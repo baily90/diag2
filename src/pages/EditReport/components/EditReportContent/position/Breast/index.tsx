@@ -7,7 +7,7 @@ import DynamicForm, { transformData } from '@/components/DynamicForm';
 import {
   left, right, remark, csts, jkjy,
 } from '../../formConfig/breast';
-// import CompDoctorSign from 'components/CompDoctorSign';
+import CompDoctorSign from '@/components/CompDoctorSign';
 import { submitType } from '@/types/formField';
 import styles from '../index.module.less';
 import { transformSubmitDataConfig } from '../../formConfig/breast/csts';
@@ -197,17 +197,15 @@ const Breast: FunctionComponent<BreastProps> = () => {
         <DynamicForm {...jkjy} onSubmit={onFormJKJYConfirm} form={formJKJY} />
       ),
     },
-    // {
-    //   key: 'ysqm',
-    //   name: '医生签名',
-    //   render: (): React.ReactNode => (
-    //     <CompDoctorSign
-    //       signImg={signImg}
-    //       signHandler={signHandler}
-    //       onSubmit={previewReport}
-    //     />
-    //   ),
-    // },
+    {
+      key: 'ysqm',
+      name: '医生签名',
+      render: (): React.ReactNode => (
+        <CompDoctorSign
+          onSubmit={previewReport}
+        />
+      ),
+    },
   ];
 
   // 二级tab配置

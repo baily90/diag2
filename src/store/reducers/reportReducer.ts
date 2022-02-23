@@ -42,6 +42,7 @@ interface ReportState {
   mark_data: [], // 标注信息
   templateData: [], // 报告模板
   signImg: '', // 医生签名
+  normalData: object // 一键正常配置
 }
 
 const initialState: ReportState = {
@@ -72,6 +73,7 @@ const initialState: ReportState = {
   mark_data: [],
   templateData: [],
   signImg: '',
+  normalData: null,
 };
 
 export const reportSlice = createSlice({
@@ -144,6 +146,7 @@ export const getEditReportInfo = (check_id: number) => async (dispatch: AppDispa
         mark_data: [],
         templateData: [],
         signImg: '',
+        normalData: null,
       };
       dispatch(updateState(obj));
       dispatch(updateState({ is_loading: false }));
@@ -204,6 +207,7 @@ export const getReportDetailInfo = (diag_id: number) => async (dispatch: AppDisp
         mark_data: [],
         templateData: [],
         signImg: '',
+        normalData: null,
       };
       dispatch(updateState(obj));
       dispatch(updateState({ is_loading: false }));

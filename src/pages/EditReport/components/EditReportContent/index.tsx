@@ -29,6 +29,7 @@ const EditReportContent: FunctionComponent<EditReportContentProps> = () => {
   const {
     body_region_id: type,
     position_info,
+    normalData,
     signImg,
     is_danger,
     diag_id,
@@ -47,6 +48,7 @@ const EditReportContent: FunctionComponent<EditReportContentProps> = () => {
 
   const [formLeft] = Form.useForm();
   const [formRight] = Form.useForm();
+  const [formIsthmus] = Form.useForm();
   const [formRemark] = Form.useForm();
   const [formCSTS] = Form.useForm();
   const [formJKJY] = Form.useForm();
@@ -122,11 +124,22 @@ const EditReportContent: FunctionComponent<EditReportContentProps> = () => {
   const renderForm = () => {
     switch (type) {
       case 1:
-        return <Thyroid />;
+        return (
+          <Thyroid
+            forms={[formLeft, formRight, formIsthmus, formRemark, formCSTS, formJKJY]}
+            normalData={normalData}
+            firstLevelActiveKey={firstLevelActiveKey}
+            setFirstLevelActiveKey={setFirstLevelActiveKey}
+            secondLevelActiveKey={secondLevelActiveKey}
+            setSecondLevelActiveKey={setSecondLevelActiveKey}
+            validateCSSJFields={validateCSSJFields}
+          />
+        );
       case 2:
         return (
           <Carotid
             defaultData={defaultData}
+            normalData={normalData}
             forms={[formLeft, formRight, formRemark, formCSTS, formJKJY]}
             firstLevelActiveKey={firstLevelActiveKey}
             setFirstLevelActiveKey={setFirstLevelActiveKey}

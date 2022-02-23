@@ -1,0 +1,110 @@
+// 1-甲状腺 2-颈动脉 3-肝脏 6-乳腺
+export default {
+  1: {
+    tabs: {
+      left: {
+        thyroid_size: 0,
+        thyroid_echoes: 0,
+        echoes_uniformity: 0,
+        exist_tuber: 0,
+      },
+      right: {
+        thyroid_size: 0,
+        thyroid_echoes: 0,
+        echoes_uniformity: 0,
+        exist_tuber: 0,
+      },
+      isthmus: {
+        thyroid_size: 0,
+        thyroid_echoes: 0,
+        echoes_uniformity: 0,
+        exist_tuber: 0,
+      },
+    },
+    csts: [0],
+    cs_tips: ['54'],
+    health_proposal: 0,
+  },
+  2: {
+    tabs: {
+      left: {
+        not_show: 0,
+        intimal_surface: 1,
+        intimal_thickness: '',
+        intimal_echoes: 1,
+        luminal_patch: 1,
+        blood_flow: 0,
+      },
+      right: {
+        not_show: 0,
+        intimal_surface: 1,
+        intimal_thickness: '',
+        intimal_echoes: 1,
+        luminal_patch: 1,
+        blood_flow: 0,
+      },
+    },
+    csts: [0],
+    cs_tips: ['63'],
+    health_proposal: 0,
+  },
+  3: {
+    tabs: {
+      left: {
+        not_show: 2,
+        size: 1,
+        echo: 1,
+        echo_uniformity: 1,
+        intrahepatic_duct: 1,
+        liver_capsule: 1,
+        intrahepatic_blood_flow: 1,
+        perihepatic_effusion: 2,
+        exist_focus: 2,
+      },
+      right: {
+        not_show: 2,
+        size: 1,
+        echo: 1,
+        echo_uniformity: 1,
+        intrahepatic_duct: 1,
+        liver_capsule: 1,
+        intrahepatic_blood_flow: 1,
+        perihepatic_effusion: 2,
+        exist_focus: 2,
+      },
+      gallbladder: {
+        not_show: 2,
+        size: 1,
+        echo: 101,
+        gall_wall: 1,
+        exist_focus: 2,
+      },
+    },
+    csts: [0],
+    cs_tips: ['14'],
+    health_proposal: 0,
+  },
+  6: {
+    tabs: {
+      left: {
+        not_show: 2,
+        gland_thickness: 1,
+        gland_echo: 1,
+        echo_uniformity: 1,
+        breast_duct: 1,
+        exist_tuber: 2,
+      },
+      right: {
+        not_show: 2,
+        gland_thickness: 1,
+        gland_echo: 1,
+        echo_uniformity: 1,
+        breast_duct: 1,
+        exist_tuber: 2,
+      },
+    },
+    csts: [0],
+    cs_tips: ['23'],
+    health_proposal: 0,
+  },
+};

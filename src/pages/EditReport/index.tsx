@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import parseInt from 'lodash/parseInt';
 import { Skeleton } from 'antd';
-import TimeoutTipsModal from '@/components/TimeoutTipsModal';
+import TimeoutTipsModal from '@/components/TimeoutTipsModal/index1';
 import { getEditReportInfo } from '@/store/reducers/reportReducer';
 import { RootState } from '@/store';
 import EditReportDicom from './components/EditReportDicom';
@@ -37,6 +37,7 @@ const EditReport: FunctionComponent<EditReportProps> = () => {
           </RecordDicomPaintProvider>
         </CheckImageContextProvider>
       </Skeleton>
+      <TimeoutTipsModal />
     </div>
   );
 };
