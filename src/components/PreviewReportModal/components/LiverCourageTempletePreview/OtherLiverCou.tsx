@@ -12,7 +12,7 @@ import {
   couAfterSound,
 } from '@/constants/liverCourageOptions';
 
-import styles from '../index.less';
+import '../index.less';
 
 interface OtherLiverCouProps {
   templateData: DEFINE.GlobalTyps;
@@ -41,7 +41,7 @@ const OtherLiverCou: React.FC<OtherLiverCouProps> = (props) => {
 
     if (name === 'gall_wall_thickness') {
       return (
-        <div className={styles.line}>
+        <div className="line">
           {!isUndefined(gallbladder[name]) && (
             <ul>
               <li>{label}</li>
@@ -65,7 +65,7 @@ const OtherLiverCou: React.FC<OtherLiverCouProps> = (props) => {
 
       const IsShow = isUndefined(isthmus_f_s_x) && isUndefined(isthmus_f_s_y);
       return (
-        <div className={styles.line}>
+        <div className="line">
           {!IsShow && (
             <ul>
               <li>{label}</li>
@@ -92,7 +92,7 @@ const OtherLiverCou: React.FC<OtherLiverCouProps> = (props) => {
     }
 
     return (
-      <div className={styles.line}>
+      <div className="line">
         {!IsShow && (
           <ul>
             <li>{label || ''}</li>

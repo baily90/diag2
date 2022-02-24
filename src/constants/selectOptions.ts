@@ -761,10 +761,55 @@ export const carFilmList = [
   ...soundCarComplex,
 ];
 
+// 肝胆文字额外配置
+const soundThyCalci: DEFINE.radioListTypes[] = [
+  {
+    label: '',
+    value: '15',
+    txt: '肝内脂肪浸润',
+  },
+  {
+    label: '',
+    value: '19',
+    txt: '局限性脂肪肝',
+  },
+  {
+    label: '',
+    value: '20',
+    txt: '慢性肝病，考虑肝纤维化，请结合肝功能检查',
+  },
+  {
+    label: '',
+    value: '21',
+    txt: '慢性肝病，考虑肝硬化，请结合肝功能检查',
+  },
+  {
+    label: '',
+    value: '2001',
+    txt: '胆囊炎',
+  },
+  {
+    label: '',
+    value: '2002',
+    txt: '胆囊结石',
+  },
+  {
+    label: '',
+    value: '2003',
+    txt: '胆壁胆固醇结晶',
+  },
+  {
+    label: '',
+    value: '2004',
+    txt: '胆囊息肉',
+  },
+];
+
 // 肝胆合并
 export const liverCouList = [
   ...soundLiverNormal,
   ...soundLiverCou,
+  ...soundThyCalci,
 ];
 
 // 乳腺合并

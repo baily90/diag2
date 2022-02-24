@@ -3,6 +3,7 @@ import {
   Tabs, Form, Button, message,
 } from 'antd';
 import _ from 'lodash';
+import { useSelector } from 'react-redux';
 import DynamicForm, { transformData } from '@/components/DynamicForm';
 import {
   left, right, remark, csts, jkjy,
@@ -11,14 +12,19 @@ import CompDoctorSign from '@/components/CompDoctorSign';
 import { submitType } from '@/types/formField';
 import styles from '../index.module.less';
 import { transformSubmitDataConfig } from '../../formConfig/breast/csts';
+import { RootState } from '@/store';
 
 const { TabPane } = Tabs;
 
 interface BreastProps {
-
+  normalData: object,
+  getReportData: (val: object) => void
 }
 
-const Breast: FunctionComponent<BreastProps> = () => {
+const Breast: FunctionComponent<BreastProps> = ({
+  normalData,
+  getReportData,
+}) => {
   const [formLeft] = Form.useForm();
   const [formRight] = Form.useForm();
   const [formRemark] = Form.useForm();
@@ -28,43 +34,10 @@ const Breast: FunctionComponent<BreastProps> = () => {
   const [firstLevelActiveKey, setFirstLevelActiveKey] = useState('cssj');
   const [secondLevelActiveKey, setSecondLevelActiveKey] = useState('left');
 
-  const [signImg, setSignImg] = useState();
+  const { signImg } = useSelector((state: RootState) => state.report);
 
   useEffect(() => {
-    window.addEventListener('message', handler);
-    return () => window.removeEventListener('message', handler);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const normalData = {
-    tabs: {
-      left: {
-        not_show: 2,
-        gland_thickness: 1,
-        gland_echo: 1,
-        echo_uniformity: 1,
-        breast_duct: 1,
-        exist_tuber: 2,
-      },
-      right: {
-        not_show: 2,
-        gland_thickness: 1,
-        gland_echo: 1,
-        echo_uniformity: 1,
-        breast_duct: 1,
-        exist_tuber: 2,
-      },
-    },
-    csts: [0],
-    cs_tips: ['23'],
-    health_proposal: 0,
-  };
-
-  const handler = (e: any) => {
-    if (e.origin !== origin) return;
-    console.log('mesFromReact', e?.data);
-    const { type, data } = e?.data;
-    if (type === 'onekeyNormal') {
+    if (normalData) {
       formLeft.resetFields();
       formRight.resetFields();
       formRemark.resetFields();
@@ -76,10 +49,8 @@ const Breast: FunctionComponent<BreastProps> = () => {
       formCSTS.setFieldsValue(normalData);
       formJKJY.setFieldsValue(normalData);
       setFirstLevelActiveKey('ysqm');
-    } else if (type === 'getSignImg') {
-      setSignImg(data?.url);
     }
-  };
+  }, [normalData]);
 
   /**
    * 超声所见校验器
@@ -113,8 +84,8 @@ const Breast: FunctionComponent<BreastProps> = () => {
                 { cs_tip_des, cs_tips },
               );
 
-              window.parent
-                && window.parent.postMessage({ type: 'previewReport', data }, '*');
+              getReportData(data);
+              console.log('验证通过，预览报告', data);
             } else {
               message.warning('请先确认签名');
             }

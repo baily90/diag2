@@ -3,40 +3,63 @@ import {
   Tabs, Form, Button, message, Menu, Dropdown,
 } from 'antd';
 import _ from 'lodash';
+import { useSelector } from 'react-redux';
 import CompDoctorSign from '@/components/CompDoctorSign';
 import DynamicForm from '@/components/DynamicForm';
 import { cssj, csts, jkjy } from '../../formConfig/mesareic';
 import { submitType } from '@/types/formField';
 import styles from '../index.module.less';
+import { RootState } from '@/store';
 
 const { TabPane } = Tabs;
-
-interface UniversalProps {
-
+interface MesareicProps {
+  getReportData: (val: object) => void
 }
 
-const Universal: FunctionComponent<UniversalProps> = () => {
+const Mesareic: FunctionComponent<MesareicProps> = ({
+  getReportData,
+}) => {
   const [formCSSJ] = Form.useForm();
   const [formCSTS] = Form.useForm();
   const [formJKJY] = Form.useForm();
 
   const [firstLevelActiveKey, setFirstLevelActiveKey] = useState('cssj');
 
-  const [signImg, setSignImg] = useState();
+  const { signImg, mesareicTemplateData } = useSelector((state: RootState) => state.report);
 
   useEffect(() => {
-    window.addEventListener('message', handler);
-    return () => window.removeEventListener('message', handler);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    const template = mesareicTemplateData.filter((item) => item.selected)?.[0];
+    if (template) {
+      const { key, cssj: cssj_temp } = template;
+      formJKJY.resetFields();
+      const { cssj } = formCSSJ.getFieldsValue();
+      let { cs_tips } = formCSTS.getFieldsValue();
+      let cssj_text = '';
+      if (cssj) {
+        cssj_text += cssj;
+      }
+      cssj_text += cssj_temp;
+      formCSSJ.setFieldsValue({ cssj: `${cssj_text}` });
+
+      const csts = key === 1 ? 1 : key === 3 ? 2 : key === 2 ? 3 : '';
+      if (cs_tips) {
+        if (!cs_tips.includes(csts)) {
+          cs_tips?.push(csts);
+        }
+      } else {
+        cs_tips = [csts];
+      }
+      formCSTS.setFieldsValue({ cs_tips });
+      const health_proposal = key === 1 ? 0 : key === 3 ? 1 : key === 2 ? 2 : '';
+      formJKJY.setFieldsValue({ health_proposal });
+    }
+  }, [mesareicTemplateData]);
 
   const handler = (e: any) => {
     if (e.origin !== origin) return;
     console.log('mesFromReact', e?.data);
     const { type, data } = e?.data;
-    if (type === 'getSignImg') {
-      setSignImg(data?.url);
-    } else if (type === 'setTemplate') {
+    if (type === 'setTemplate') {
       // 1-肠系膜未见明显淋巴结回声, 2-淋巴结肿大, 3-淋巴结可见
       formJKJY.resetFields();
       const { cssj } = formCSSJ.getFieldsValue();
@@ -98,8 +121,8 @@ const Universal: FunctionComponent<UniversalProps> = () => {
               formJKJY.getFieldsValue(),
               { cs_tip_des, cs_tips: test },
             );
-            window.parent
-              && window.parent.postMessage({ type: 'previewReport', data }, '*');
+            getReportData(data);
+            console.log('验证通过，预览报告', data);
           } else {
             message.warning('请先确认签名');
           }
@@ -141,13 +164,6 @@ const Universal: FunctionComponent<UniversalProps> = () => {
    */
   const previewReport = () => {
     validateCSSJFields();
-  };
-
-  /**
-   * 医师签名-获取签名
-   */
-  const signHandler = () => {
-    window.parent && window.parent.postMessage({ type: 'getSignImg' }, '*');
   };
 
   const extraOperations = (
@@ -281,4 +297,4 @@ const Universal: FunctionComponent<UniversalProps> = () => {
   return <div className={styles.container}>{renderTab(tabs)}</div>;
 };
 
-export default Universal;
+export default Mesareic;

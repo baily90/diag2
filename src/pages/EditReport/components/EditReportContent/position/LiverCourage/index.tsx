@@ -3,6 +3,7 @@ import {
   Tabs, Form, Button, message,
 } from 'antd';
 import _ from 'lodash';
+import { useSelector } from 'react-redux';
 import CompDoctorSign from '@/components/CompDoctorSign';
 import {
   left,
@@ -16,14 +17,19 @@ import {
 import DynamicForm from '@/components/DynamicForm';
 import { submitType } from '@/types/formField';
 import styles from '../index.module.less';
+import { RootState } from '@/store';
 
 const { TabPane } = Tabs;
 
 interface LiverCourageProps {
-
+  normalData: object,
+  getReportData: (val: object) => void
 }
 
-const LiverCourage: FunctionComponent<LiverCourageProps> = () => {
+const LiverCourage: FunctionComponent<LiverCourageProps> = ({
+  normalData,
+  getReportData,
+}) => {
   const [formLeft] = Form.useForm();
   const [formRight] = Form.useForm();
   const [formGallbladder] = Form.useForm();
@@ -35,56 +41,10 @@ const LiverCourage: FunctionComponent<LiverCourageProps> = () => {
   const [firstLevelActiveKey, setFirstLevelActiveKey] = useState('cssj');
   const [secondLevelActiveKey, setSecondLevelActiveKey] = useState('left');
 
-  const [signImg, setSignImg] = useState();
+  const { signImg } = useSelector((state: RootState) => state.report);
 
   useEffect(() => {
-    window.addEventListener('message', handler);
-    return () => window.removeEventListener('message', handler);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const normalData = {
-    tabs: {
-      left: {
-        not_show: 2,
-        size: 1,
-        echo: 1,
-        echo_uniformity: 1,
-        intrahepatic_duct: 1,
-        liver_capsule: 1,
-        intrahepatic_blood_flow: 1,
-        perihepatic_effusion: 2,
-        exist_focus: 2,
-      },
-      right: {
-        not_show: 2,
-        size: 1,
-        echo: 1,
-        echo_uniformity: 1,
-        intrahepatic_duct: 1,
-        liver_capsule: 1,
-        intrahepatic_blood_flow: 1,
-        perihepatic_effusion: 2,
-        exist_focus: 2,
-      },
-      gallbladder: {
-        not_show: 2,
-        size: 1,
-        echo: 101,
-        gall_wall: 1,
-        exist_focus: 2,
-      },
-    },
-    csts: [0],
-    cs_tips: ['14'],
-    health_proposal: 0,
-  };
-
-  const handler = (e: any) => {
-    if (e.origin !== origin) return;
-    console.log('mesFromReact', e?.data);
-    const { type, data } = e?.data;
-    if (type === 'onekeyNormal') {
+    if (normalData) {
       formLeft.resetFields();
       formRight.resetFields();
       formGallbladder.resetFields();
@@ -99,10 +59,8 @@ const LiverCourage: FunctionComponent<LiverCourageProps> = () => {
       formCSTS.setFieldsValue(normalData);
       formJKJY.setFieldsValue(normalData);
       setFirstLevelActiveKey('ysqm');
-    } else if (type === 'getSignImg') {
-      setSignImg(data?.url);
     }
-  };
+  }, [normalData]);
 
   /**
   * 超声所见校验器
@@ -159,12 +117,8 @@ const LiverCourage: FunctionComponent<LiverCourageProps> = () => {
                   formJKJY.getFieldsValue(),
                   { cs_tip_des, cs_tips },
                 );
-
-                window.parent
-                  && window.parent.postMessage(
-                    { type: 'previewReport', data },
-                    '*',
-                  );
+                getReportData(data);
+                console.log('验证通过，预览报告', data);
               } else {
                 message.warning('请先确认签名');
               }
@@ -222,13 +176,6 @@ const LiverCourage: FunctionComponent<LiverCourageProps> = () => {
    */
   const previewReport = () => {
     validateCSSJFields();
-  };
-
-  /**
-   * 医师签名-获取签名
-   */
-  const signHandler = () => {
-    window.parent && window.parent.postMessage({ type: 'getSignImg' }, '*');
   };
 
   const extraOperations = (

@@ -48,3 +48,7 @@ export function sendMarkDataService(data) {
 export function handleReportService(data) {
   return request.post(api.report.handleReport, data);
 }
+
+export function getMesareicTemplateDataService(diag_id: number) {
+  return request.get(api.report.mesareicTemplateData, { params: { diag_id } });
+}

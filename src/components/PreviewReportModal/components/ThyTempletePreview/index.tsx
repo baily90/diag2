@@ -13,7 +13,7 @@ import {
   tuberCalcification,
 } from '@/constants/thyroidOptions';
 
-import styles from '../index.less';
+import '../index.less';
 
 interface ThyTempletePreviewProps {
   templateData: any;
@@ -54,7 +54,7 @@ const ThyTempletePreview: React.FC<ThyTempletePreviewProps> = (props) => {
       const [txt_1] = ['大者'];
 
       return (
-        <div className={styles.line}>
+        <div className="line">
           {!IsShow && (
             <>
               <ul>
@@ -124,7 +124,7 @@ const ThyTempletePreview: React.FC<ThyTempletePreviewProps> = (props) => {
     const IsShow = isUndefined(l_label) && isUndefined(r_label) && isUndefined(i_label);
 
     return (
-      <div className={styles.line}>
+      <div className="line">
         {!IsShow && (
           <ul>
             <li>{label}</li>
@@ -139,7 +139,7 @@ const ThyTempletePreview: React.FC<ThyTempletePreviewProps> = (props) => {
 
   return (
     <>
-      <div className={styles.line}>
+      <div className="line">
         <ul>
           <li />
           <li>左侧</li>

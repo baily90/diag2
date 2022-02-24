@@ -11,6 +11,7 @@ import {
   cancleReportService,
   getMarkDataService,
   handleReportService,
+  getMesareicTemplateDataService,
 } from '@/services/report/index';
 import { AppDispatch } from '..';
 
@@ -40,7 +41,7 @@ interface ReportState {
   position_info: object, // 左右侧颈动脉内中膜厚度
   destoryTypes: [], // 作废报告类型
   mark_data: [], // 标注信息
-  templateData: [], // 报告模板
+  mesareicTemplateData: [], // 报告模板
   signImg: '', // 医生签名
   normalData: object // 一键正常配置
 }
@@ -71,7 +72,7 @@ const initialState: ReportState = {
   position_info: {},
   destoryTypes: [],
   mark_data: [],
-  templateData: [],
+  mesareicTemplateData: [],
   signImg: '',
   normalData: null,
 };
@@ -144,7 +145,7 @@ export const getEditReportInfo = (check_id: number) => async (dispatch: AppDispa
         position_info,
         destoryTypes: [],
         mark_data: [],
-        templateData: [],
+        mesareicTemplateData: [],
         signImg: '',
         normalData: null,
       };
@@ -205,7 +206,7 @@ export const getReportDetailInfo = (diag_id: number) => async (dispatch: AppDisp
         position_info: {},
         destoryTypes: [],
         mark_data: [],
-        templateData: [],
+        mesareicTemplateData: [],
         signImg: '',
         normalData: null,
       };
@@ -359,6 +360,58 @@ export const handleReport = (data) => async () => {
 export const getSignImg = () => (dispatch: AppDispatch, getState: any) => {
   const signImg = getState().user?.info?.autograph;
   dispatch(updateState({ signImg }));
+};
+
+/**
+ * 获取肠系膜淋巴结模板
+ * @param diag_id
+ * @returns
+ */
+export const getMesareicTemplateData = (diag_id: number) => async (dispatch: AppDispatch) => {
+  // dispatch(updateState({
+  //   mesareicTemplateData:
+  //     [
+  //       {
+  //         key: 1,
+  //         title: '肠系膜未见明显淋巴结回声',
+  //         cssj: '脐周未探及明显淋巴结回声。',
+  //         csts: '肠系膜未见明显淋巴结回声',
+  //         jkjy: '健康，建议定期(半年)进行健康体检，超声随访，保持健康的生活习惯。',
+  //         selected: false,
+  //       },
+  //       {
+  //         key: 2,
+  //         title: '肠系膜淋巴结肿大',
+  //         cssj: '脐周可探及数枚低回声结节，大者约 * mm，形态规则，呈椭圆形，包膜光整，回声均匀，边界清，可/未见淋巴门。',
+  //         csts: '肠系膜淋巴结肿大',
+  //         jkjy: '中风险，建议遵医嘱结合实验室检查及相关治疗，结合中医中药调理，改善生活方式，定期 (1-3个月)进行健康检查及超声随访。',
+  //         selected: false,
+  //       },
+  //       {
+  //         key: 3,
+  //         title: '肠系膜淋巴结可见',
+  //         cssj: '脐周可探及数枚低回声结节，大者约 * mm，形态规则，呈椭圆形，包膜光整，回声均匀，边界清，可/未见淋巴门。',
+  //         csts: '肠系膜淋巴结可见',
+  //         jkjy: '低风险，建议结合中医中药调理，保持健康的生活方式，定期(3-6个月)进行健康检查及超声随访。',
+  //         selected: false,
+  //       },
+  //     ],
+  // }));
+
+  try {
+    const { code, data } = await getMesareicTemplateDataService(diag_id);
+    if (code === 200) {
+      if (data && data.length) {
+        const temp = data.map((item) => {
+          item.selected = false;
+          return item;
+        });
+        dispatch(updateState({ mesareicTemplateData: temp }));
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export default reportSlice.reducer;

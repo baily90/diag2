@@ -12,6 +12,7 @@ import React, {
   useState,
   memo,
 } from 'react';
+import clone from 'lodash/clone';
 import html2canvas from 'html2canvas';
 import { useDispatch, useSelector } from 'react-redux';
 import { saveImageToOss } from '@/utils/oss';
@@ -85,7 +86,7 @@ const DicomOperate = ({
   const {
     sources,
     scan_comment,
-    templateData,
+    mesareicTemplateData,
     body_region_id,
   } = useSelector((state: RootState) => state.report);
   const dispatch = useDispatch();
@@ -173,32 +174,32 @@ const DicomOperate = ({
     e.preventDefault();
   };
 
-  const selectTemplateHandler = (data: any) => {
-    const iframe = document.getElementById('DynamicReportForm');
-    iframe?.contentWindow?.postMessage(
-      { type: 'setTemplate', data: data.key },
-      '*',
-    );
+  const selectTemplateHandler = (key: number) => {
+    const temp = mesareicTemplateData.map((item) => {
+      const obj = clone(item);
+      obj.selected = false;
+      if (key === obj.key) {
+        obj.selected = true;
+      }
+      return obj;
+    });
+    dispatch(updateState({ mesareicTemplateData: temp }));
   };
 
-  const getTemplateMenu = () => {
-    console.log('templateData');
-
-    return (
-      <Menu style={{ width: 300 }}>
-        {templateData?.map((item: any) => (
-          <Menu.Item
-            key={item.key}
-            className="drowDownMenu"
-            onClick={() => selectTemplateHandler(item)}
-          >
-            {item.title}
-            <Button type="link">填入</Button>
-          </Menu.Item>
-        ))}
-      </Menu>
-    );
-  };
+  const getTemplateMenu = () => (
+    <Menu style={{ width: 300 }}>
+      {mesareicTemplateData?.map((item: any) => (
+        <Menu.Item
+          key={item.key}
+          className="drowDownMenu"
+          onClick={() => selectTemplateHandler(item.key)}
+        >
+          {item.title}
+          <Button type="link">填入</Button>
+        </Menu.Item>
+      ))}
+    </Menu>
+  );
 
   return (
     <Space>
@@ -244,11 +245,11 @@ const DicomOperate = ({
         </div>
       )}
       {!disabled && body_region_id === 7 && (
-        <div style={{ marginLeft: '7%' }}>
-          <Dropdown overlay={getTemplateMenu()} trigger={['click']}>
-            <Button type="dashed">报告模板</Button>
-          </Dropdown>
-        </div>
+      <div style={{ marginLeft: '7%' }}>
+        <Dropdown overlay={getTemplateMenu()} trigger={['click']}>
+          <Button type="dashed">报告模板</Button>
+        </Dropdown>
+      </div>
       )}
     </Space>
   );

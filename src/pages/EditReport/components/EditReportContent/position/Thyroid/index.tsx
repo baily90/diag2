@@ -2,9 +2,10 @@ import {
   ReactNode, FunctionComponent, useEffect, useState,
 } from 'react';
 import {
-  Tabs, Form, Button, message, FormInstance,
+  Tabs, Form, Button, message,
 } from 'antd';
 import _ from 'lodash';
+import { useSelector } from 'react-redux';
 import CompDoctorSign from '@/components/CompDoctorSign';
 import {
   left,
@@ -18,29 +19,30 @@ import { submitType } from '@/types/formField';
 import styles from '../index.module.less';
 import { transformSubmitDataConfig } from '../../formConfig/thyroid/csts';
 import DynamicForm, { transformData } from '@/components/DynamicForm';
+import { RootState } from '@/store';
 
 const { TabPane } = Tabs;
 
 interface ThyroidProps {
- forms: FormInstance[],
   normalData: object,
-  firstLevelActiveKey: string,
-  setFirstLevelActiveKey: (val: string) => void,
-  secondLevelActiveKey: string,
-  setSecondLevelActiveKey: (val: string) => void,
-  validateCSSJFields: () => void
+  getReportData: (val: object) => void
 }
 
 const Thyroid: FunctionComponent<ThyroidProps> = ({
-  forms,
   normalData,
-  firstLevelActiveKey,
-  setFirstLevelActiveKey,
-  secondLevelActiveKey,
-  setSecondLevelActiveKey,
-  validateCSSJFields,
+  getReportData,
 }) => {
-  const [formLeft, formRight, formIsthmus, formRemark, formCSTS, formJKJY] = forms;
+  const [formLeft] = Form.useForm();
+  const [formRight] = Form.useForm();
+  const [formIsthmus] = Form.useForm();
+  const [formRemark] = Form.useForm();
+  const [formCSTS] = Form.useForm();
+  const [formJKJY] = Form.useForm();
+
+  const [firstLevelActiveKey, setFirstLevelActiveKey] = useState('cssj');
+  const [secondLevelActiveKey, setSecondLevelActiveKey] = useState('left');
+
+  const { signImg } = useSelector((state: RootState) => state.report);
 
   useEffect(() => {
     if (normalData) {
@@ -64,64 +66,60 @@ const Thyroid: FunctionComponent<ThyroidProps> = ({
    * 超声所见校验器
    * 所有校验通过通知父窗口预览报告
    */
-  // const validateCSSJFields = async () => {
-  //   try {
-  //     await formLeft.validateFields();
-  //     try {
-  //       await formRight.validateFields();
-  //       try {
-  //         await formIsthmus.validateFields();
-  //         try {
-  //           await formCSTS.validateFields();
-  //           try {
-  //             await formJKJY.validateFields();
+  const validateCSSJFields = async () => {
+    try {
+      await formLeft.validateFields();
+      try {
+        await formRight.validateFields();
+        try {
+          await formIsthmus.validateFields();
+          try {
+            await formCSTS.validateFields();
+            try {
+              await formJKJY.validateFields();
 
-  //             if (signImg) {
-  //               const data = {};
-  //               let { cs_tip_des, cs_tips } = formCSTS.getFieldsValue();
-  //               cs_tips = transformData(
-  //                 formCSTS.getFieldsValue(),
-  //                 transformSubmitDataConfig,
-  //               ).cs_tips;
-  //               cs_tips = cs_tips.filter((item: any) => !!item);
-  //               _.merge(
-  //                 data,
-  //                 formLeft.getFieldsValue(),
-  //                 formRight.getFieldsValue(),
-  //                 formIsthmus.getFieldsValue(),
-  //                 formRemark.getFieldsValue(),
-  //                 formJKJY.getFieldsValue(),
-  //                 { cs_tip_des, cs_tips },
-  //               );
-
-  //               window.parent
-  //                 && window.parent.postMessage(
-  //                   { type: 'previewReport', data },
-  //                   '*',
-  //                 );
-  //             } else {
-  //               message.warning('请先确认签名');
-  //             }
-  //             setFirstLevelActiveKey('ysqm');
-  //           } catch (error) {
-  //             setFirstLevelActiveKey('jkjy');
-  //           }
-  //         } catch (error) {
-  //           setFirstLevelActiveKey('csts');
-  //         }
-  //       } catch (error) {
-  //         setFirstLevelActiveKey('cssj');
-  //         setSecondLevelActiveKey('isthmus');
-  //       }
-  //     } catch (error) {
-  //       setFirstLevelActiveKey('cssj');
-  //       setSecondLevelActiveKey('right');
-  //     }
-  //   } catch (error) {
-  //     setFirstLevelActiveKey('cssj');
-  //     setSecondLevelActiveKey('left');
-  //   }
-  // };
+              if (signImg) {
+                const data = {};
+                let { cs_tip_des, cs_tips } = formCSTS.getFieldsValue();
+                cs_tips = transformData(
+                  formCSTS.getFieldsValue(),
+                  transformSubmitDataConfig,
+                ).cs_tips;
+                cs_tips = cs_tips.filter((item: any) => !!item);
+                _.merge(
+                  data,
+                  formLeft.getFieldsValue(),
+                  formRight.getFieldsValue(),
+                  formIsthmus.getFieldsValue(),
+                  formRemark.getFieldsValue(),
+                  formJKJY.getFieldsValue(),
+                  { cs_tip_des, cs_tips },
+                );
+                getReportData(data);
+                console.log('验证通过，预览报告', data);
+              } else {
+                message.warning('请先确认签名');
+              }
+              setFirstLevelActiveKey('ysqm');
+            } catch (error) {
+              setFirstLevelActiveKey('jkjy');
+            }
+          } catch (error) {
+            setFirstLevelActiveKey('csts');
+          }
+        } catch (error) {
+          setFirstLevelActiveKey('cssj');
+          setSecondLevelActiveKey('isthmus');
+        }
+      } catch (error) {
+        setFirstLevelActiveKey('cssj');
+        setSecondLevelActiveKey('right');
+      }
+    } catch (error) {
+      setFirstLevelActiveKey('cssj');
+      setSecondLevelActiveKey('left');
+    }
+  };
 
   const onFormRemarkConfirm = async (...args: submitType) => {
     const [value, suc, error] = args;

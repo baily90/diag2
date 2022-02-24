@@ -2,44 +2,45 @@ import {
   ReactNode, FunctionComponent, useEffect, useState,
 } from 'react';
 import {
-  Tabs, Form, Button, message, FormInstance,
+  Tabs, Form, Button, message,
 } from 'antd';
 import _ from 'lodash';
-// import CompDoctorSign from 'components/CompDoctorSign';
-import DynamicForm from '@/components/DynamicForm';
+import { useSelector } from 'react-redux';
+import DynamicForm, { transformData } from '@/components/DynamicForm';
 import {
   left, right, remark, csts, jkjy,
 } from '../../formConfig/carotid';
 import { submitType } from '@/types/formField';
 import styles from '../index.module.less';
 import CompDoctorSign from '@/components/CompDoctorSign';
+import { RootState } from '@/store';
+import { transformSubmitDataConfig } from '../../formConfig/carotid/csts';
 
 const { TabPane } = Tabs;
 
 interface CarotidProps {
-  forms: FormInstance[],
   defaultData?: {
     [key: string]: string;
   };
   normalData: object,
-  firstLevelActiveKey: string,
-  setFirstLevelActiveKey: (val: string) => void,
-  secondLevelActiveKey: string,
-  setSecondLevelActiveKey: (val: string) => void,
-  validateCSSJFields: () => void
+  getReportData: (val: object) => void
 }
 
 const Carotid: FunctionComponent<CarotidProps> = ({
   defaultData,
   normalData,
-  forms,
-  firstLevelActiveKey,
-  setFirstLevelActiveKey,
-  secondLevelActiveKey,
-  setSecondLevelActiveKey,
-  validateCSSJFields,
+  getReportData,
 }) => {
-  const [formLeft, formRight, formRemark, formCSTS, formJKJY] = forms;
+  const [formLeft] = Form.useForm();
+  const [formRight] = Form.useForm();
+  const [formRemark] = Form.useForm();
+  const [formCSTS] = Form.useForm();
+  const [formJKJY] = Form.useForm();
+
+  const [firstLevelActiveKey, setFirstLevelActiveKey] = useState('cssj');
+  const [secondLevelActiveKey, setSecondLevelActiveKey] = useState('left');
+
+  const { signImg } = useSelector((state: RootState) => state.report);
 
   useEffect(() => {
     formLeft.setFieldsValue(defaultData);
@@ -62,6 +63,55 @@ const Carotid: FunctionComponent<CarotidProps> = ({
       setFirstLevelActiveKey('ysqm');
     }
   }, [normalData]);
+
+  const validateCSSJFields = async () => {
+    try {
+      await formLeft.validateFields();
+      try {
+        await formRight.validateFields();
+        try {
+          await formCSTS.validateFields();
+          try {
+            await formJKJY.validateFields();
+
+            if (signImg) {
+              const data = {};
+              let { cs_tip_des, cs_tips } = formCSTS.getFieldsValue();
+              cs_tips = transformData(
+                formCSTS.getFieldsValue(),
+                transformSubmitDataConfig,
+              ).cs_tips;
+              cs_tips = cs_tips.filter((item: any) => !!item);
+
+              _.merge(
+                data,
+                formLeft.getFieldsValue(),
+                formRight.getFieldsValue(),
+                formRemark.getFieldsValue(),
+                formJKJY.getFieldsValue(),
+                { cs_tip_des, cs_tips },
+              );
+              getReportData(data);
+              console.log('验证通过，预览报告', data);
+            } else {
+              message.warning('请先确认签名');
+            }
+            setFirstLevelActiveKey('ysqm');
+          } catch (error) {
+            setFirstLevelActiveKey('jkjy');
+          }
+        } catch (error) {
+          setFirstLevelActiveKey('csts');
+        }
+      } catch (error) {
+        setFirstLevelActiveKey('cssj');
+        setSecondLevelActiveKey('right');
+      }
+    } catch (error) {
+      setFirstLevelActiveKey('cssj');
+      setSecondLevelActiveKey('left');
+    }
+  };
 
   const onFormRemarkConfirm = async (...args: submitType) => {
     const [value, suc, error] = args;

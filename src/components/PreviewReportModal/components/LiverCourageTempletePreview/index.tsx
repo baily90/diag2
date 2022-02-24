@@ -61,7 +61,7 @@ const LiverCourageTempletePreview: React.FC<LiverCourageTempletePreviewProps> = 
       const [txt_1] = ['大者'];
 
       return (
-        <div className={styles.line}>
+        <div className="line">
           {!IsShow && (
             <>
               <ul>
@@ -114,7 +114,7 @@ const LiverCourageTempletePreview: React.FC<LiverCourageTempletePreviewProps> = 
     }
 
     return (
-      <div className={styles.line}>
+      <div className="line">
         {!IsShow && (
           <ul>
             <li>{label || ''}</li>
@@ -128,7 +128,7 @@ const LiverCourageTempletePreview: React.FC<LiverCourageTempletePreviewProps> = 
 
   return (
     <>
-      <div className={styles.line}>
+      <div className="line">
         <ul>
           <li />
           <li>左叶</li>

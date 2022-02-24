@@ -16,7 +16,7 @@ import {
   backEcho,
 } from '@/constants/breastOptions';
 
-import styles from '../index.less';
+import '../index.less';
 
 interface BreastTempletePreviewProps {
   templateData: any;
@@ -58,7 +58,7 @@ const BreastTempletePreview: React.FC<BreastTempletePreviewProps> = (props) => {
       const [txt_1] = ['大者'];
 
       return (
-        <div className={styles.line}>
+        <div className="line">
           {!IsShow && (
             <>
               <ul>
@@ -111,7 +111,7 @@ const BreastTempletePreview: React.FC<BreastTempletePreviewProps> = (props) => {
     }
 
     return (
-      <div className={styles.line}>
+      <div className="line">
         {!IsShow && (
           <ul>
             <li>{label || ''}</li>
@@ -125,7 +125,7 @@ const BreastTempletePreview: React.FC<BreastTempletePreviewProps> = (props) => {
 
   return (
     <>
-      <div className={styles.line}>
+      <div className="line">
         <ul>
           <li />
           <li>左侧</li>

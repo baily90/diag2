@@ -1,6 +1,6 @@
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, message } from 'antd';
+import { message } from 'antd';
 import _ from 'lodash';
 import { useNavigate } from 'react-router-dom';
 import PreviewReportModal from '@/components/PreviewReportModal';
@@ -11,13 +11,13 @@ import LiverCourage from './position/LiverCourage';
 import Universal from './position/Universal';
 import Breast from './position/Breast';
 import Mesareic from './position/Mesareic';
-import { handleReport, nextNeedReport, updateState } from '@/store/reducers/reportReducer';
-import { transformSubmitDataConfig } from './formConfig/carotid/csts';
-import './index.less';
-import { transformData } from '@/components/DynamicForm';
+import {
+  getMesareicTemplateData, handleReport, nextNeedReport, updateState,
+} from '@/store/reducers/reportReducer';
 import { useRecordDicomPaint } from '@/components/Dicom/context/recordDicomPaint';
 import { useCheckImageContext } from '@/components/Dicom/context/checkImageProvider';
 import { sendMarkDataService } from '@/services/report';
+import './index.less';
 
 interface EditReportContentProps {
 
@@ -30,7 +30,6 @@ const EditReportContent: FunctionComponent<EditReportContentProps> = () => {
     body_region_id: type,
     position_info,
     normalData,
-    signImg,
     is_danger,
     diag_id,
     check_id,
@@ -38,20 +37,15 @@ const EditReportContent: FunctionComponent<EditReportContentProps> = () => {
 
   const { recordDicoms } = useRecordDicomPaint();
   const { checkImages } = useCheckImageContext();
-
   const [defaultData, setDefaultData] = useState({});
-
-  const [firstLevelActiveKey, setFirstLevelActiveKey] = useState('cssj');
-  const [secondLevelActiveKey, setSecondLevelActiveKey] = useState('left');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [formValue, setFormValue] = useState(null);
 
-  const [formLeft] = Form.useForm();
-  const [formRight] = Form.useForm();
-  const [formIsthmus] = Form.useForm();
-  const [formRemark] = Form.useForm();
-  const [formCSTS] = Form.useForm();
-  const [formJKJY] = Form.useForm();
+  useEffect(() => {
+    if (diag_id && type === 7) {
+      dispatch(getMesareicTemplateData(diag_id));
+    }
+  }, [diag_id, type]);
 
   useEffect(() => {
     const { left, right } = position_info;
@@ -67,58 +61,13 @@ const EditReportContent: FunctionComponent<EditReportContentProps> = () => {
     });
   }, [position_info]);
 
-  const validateCSSJFields = async () => {
-    try {
-      await formLeft.validateFields();
-      try {
-        await formRight.validateFields();
-        try {
-          await formCSTS.validateFields();
-          try {
-            await formJKJY.validateFields();
-
-            if (signImg) {
-              const data = {};
-              let { cs_tip_des, cs_tips } = formCSTS.getFieldsValue();
-              cs_tips = transformData(
-                formCSTS.getFieldsValue(),
-                transformSubmitDataConfig,
-              ).cs_tips;
-              cs_tips = cs_tips.filter((item: any) => !!item);
-
-              _.merge(
-                data,
-                formLeft.getFieldsValue(),
-                formRight.getFieldsValue(),
-                formRemark.getFieldsValue(),
-                formJKJY.getFieldsValue(),
-                { cs_tip_des, cs_tips },
-              );
-              if (checkImages.length !== 4) {
-                message.warning('报告中需要4张图片发送给患者');
-                return;
-              }
-              setFormValue(data);
-              setIsModalVisible(true);
-              console.log('验证通过，预览报告', data);
-            } else {
-              message.warning('请先确认签名');
-            }
-            setFirstLevelActiveKey('ysqm');
-          } catch (error) {
-            setFirstLevelActiveKey('jkjy');
-          }
-        } catch (error) {
-          setFirstLevelActiveKey('csts');
-        }
-      } catch (error) {
-        setFirstLevelActiveKey('cssj');
-        setSecondLevelActiveKey('right');
-      }
-    } catch (error) {
-      setFirstLevelActiveKey('cssj');
-      setSecondLevelActiveKey('left');
+  const getReportData = (data) => {
+    if (checkImages.length !== 4) {
+      message.warning('报告中需要4张图片发送给患者');
+      return;
     }
+    setFormValue(data);
+    setIsModalVisible(true);
   };
 
   const renderForm = () => {
@@ -126,13 +75,8 @@ const EditReportContent: FunctionComponent<EditReportContentProps> = () => {
       case 1:
         return (
           <Thyroid
-            forms={[formLeft, formRight, formIsthmus, formRemark, formCSTS, formJKJY]}
             normalData={normalData}
-            firstLevelActiveKey={firstLevelActiveKey}
-            setFirstLevelActiveKey={setFirstLevelActiveKey}
-            secondLevelActiveKey={secondLevelActiveKey}
-            setSecondLevelActiveKey={setSecondLevelActiveKey}
-            validateCSSJFields={validateCSSJFields}
+            getReportData={getReportData}
           />
         );
       case 2:
@@ -140,23 +84,32 @@ const EditReportContent: FunctionComponent<EditReportContentProps> = () => {
           <Carotid
             defaultData={defaultData}
             normalData={normalData}
-            forms={[formLeft, formRight, formRemark, formCSTS, formJKJY]}
-            firstLevelActiveKey={firstLevelActiveKey}
-            setFirstLevelActiveKey={setFirstLevelActiveKey}
-            secondLevelActiveKey={secondLevelActiveKey}
-            setSecondLevelActiveKey={setSecondLevelActiveKey}
-            validateCSSJFields={validateCSSJFields}
+            getReportData={getReportData}
           />
         );
       case 3:
-        return <LiverCourage />;
+        return (
+          <LiverCourage
+            normalData={normalData}
+            getReportData={getReportData}
+          />
+        );
       case 4:
       case 5:
         return <Universal />;
       case 6:
-        return <Breast />;
+        return (
+          <Breast
+            normalData={normalData}
+            getReportData={getReportData}
+          />
+        );
       case 7:
-        return <Mesareic />;
+        return (
+          <Mesareic
+            getReportData={getReportData}
+          />
+        );
       default:
         return null;
     }

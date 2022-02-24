@@ -15,6 +15,7 @@ export default {
     getMarkData: '/diag_doctor/mark/data', // 获取历史报告已标注的信息
     sendMarkData: '/diag_doctor/mark/data', // 发送标注信息
     handleReport: '/diag_doctor/report/handle', // 发送报告
+    mesareicTemplateData: '/diag_doctor/report/template', // 肠系膜淋巴结报告模板
   },
   historyReport: {
     getHistoryReportList: (page: number) => `/diag_doctor/report_list/${page}`, // 获取历史报告列表
