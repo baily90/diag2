@@ -40,6 +40,7 @@ const EditReportContent: FunctionComponent<EditReportContentProps> = () => {
   const [defaultData, setDefaultData] = useState({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [formValue, setFormValue] = useState(null);
+  const [confirmLoading, setConfirmLoading] = useState(false);
 
   useEffect(() => {
     if (diag_id && type === 7) {
@@ -119,26 +120,34 @@ const EditReportContent: FunctionComponent<EditReportContentProps> = () => {
    * 发送报告
    */
   const handleOk = async () => {
-    // 发送标注信息
-    const mark_data = recordDicoms.map((item) => item.dicomState.toJSON(item.app));
-    sendMarkDataService({ diag_id, mark_data });
+    try {
+      setConfirmLoading(true);
+      // 发送标注信息
+      const mark_data = recordDicoms.map((item) => item.dicomState.toJSON(item.app));
+      sendMarkDataService({ diag_id, mark_data });
 
-    // 提交报告
-    const { code } = await dispatch(handleReport({
-      diag_id,
-      is_danger,
-      ...formValue,
-      sources: checkImages,
-    }));
-    if (code === 200) {
-      // 下一份报告
-      const { data } = await dispatch(nextNeedReport(check_id));
-      if (data?.id && data.id !== check_id) {
-        navigate(`/editReport/${data.id}`, { replace: true });
+      // 提交报告
+      const { code } = await dispatch(handleReport({
+        diag_id,
+        is_danger,
+        ...formValue,
+        sources: checkImages,
+      }));
+      if (code === 200) {
+        setConfirmLoading(false);
+        // 下一份报告
+        const { data } = await dispatch(nextNeedReport(check_id));
+        if (data?.id && data.id !== check_id) {
+          navigate(`/editReport/${data.id}`, { replace: true });
+        } else {
+          message.info('已经没有报告了');
+        }
+        setIsModalVisible(false);
       } else {
-        message.info('已经没有报告了');
+        setConfirmLoading(false);
       }
-      setIsModalVisible(false);
+    } catch (error) {
+      setConfirmLoading(false);
     }
   };
 
@@ -146,6 +155,7 @@ const EditReportContent: FunctionComponent<EditReportContentProps> = () => {
     <div className="editReport-content">
       {renderForm()}
       <PreviewReportModal
+        confirmLoading={confirmLoading}
         isModalVisible={isModalVisible}
         formValue={formValue}
         handleOk={handleOk}

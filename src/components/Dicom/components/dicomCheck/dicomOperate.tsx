@@ -142,7 +142,6 @@ const DicomOperate = ({
       if (currentSource) {
         source = { ...currentSource };
       }
-      console.log(currentSource);
 
       source = {
         ...source,

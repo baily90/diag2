@@ -32,7 +32,8 @@ interface PreviewReportModalProps {
   isModalVisible: boolean,
   handleOk: () => void,
   handleCancel: () => void,
-  formValue: any
+  formValue: any,
+  confirmLoading: boolean
 }
 
 const PreviewReportModal: FunctionComponent<PreviewReportModalProps> = ({
@@ -40,11 +41,9 @@ const PreviewReportModal: FunctionComponent<PreviewReportModalProps> = ({
   handleOk,
   handleCancel,
   formValue = {},
+  confirmLoading,
 }) => {
   console.log('PreviewReportModal');
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const { checkImages } = useCheckImageContext();
   const {
@@ -267,12 +266,14 @@ const PreviewReportModal: FunctionComponent<PreviewReportModalProps> = ({
 
   return (
     <Modal
-      width="80%"
+      width={850}
+      confirmLoading={confirmLoading}
       visible={isModalVisible}
       onOk={handleOk}
       onCancel={handleCancel}
       okText="发送报告"
       cancelText="返回编辑"
+      maskClosable={false}
       destroyOnClose
     >
       <div className="preview-report-body">

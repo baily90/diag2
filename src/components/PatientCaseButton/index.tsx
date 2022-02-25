@@ -57,17 +57,16 @@ const PatientCaseButton: FunctionComponent<PatientCaseButtonProps> = () => {
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
-        footer={null}
+        footer={[
+          <Button type="primary" onClick={handleCancel}>
+            关闭
+          </Button>,
+        ]}
         destroyOnClose
       >
         {caseList?.map((item) => (
           <ReportDetail key={item.reportId} {...item} />
         ))}
-        <Affix offsetBottom={120}>
-          <Button type="primary" onClick={handleCancel}>
-            关闭
-          </Button>
-        </Affix>
       </Modal>
     </>
   );
