@@ -52,3 +52,7 @@ export function handleReportService(data) {
 export function getMesareicTemplateDataService(diag_id: number) {
   return request.get(api.report.mesareicTemplateData, { params: { diag_id } });
 }
+
+export function getReportConfService(checkId: number) {
+  return request.get(api.report.getReportConf, { params: { checkId } });
+}

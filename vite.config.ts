@@ -8,9 +8,14 @@ export default defineConfig({
     host: '0.0.0.0',
     proxy: {
       '/api': {
-        target: 'https://sit-diagnosis-doctor.weicha88.com',
+        target: 'https://dev-diagnosis-doctor.weicha88.com/',
         changeOrigin: true,
         rewrite: (path) => path.replace(/\/api/, '/api'),
+      },
+      '/gdiag-pc': {
+        target: 'https://dev-api.weicha88.com/',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/\/gdiag-pc/, '/gdiag-pc'),
       },
     },
   },

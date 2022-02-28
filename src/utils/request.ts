@@ -3,11 +3,11 @@ import { message } from 'antd';
 import { tokenStorage } from '@/utils/storage';
 
 const request = axios.create({
-  baseURL: '/api',
   timeout: 60000,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
+    osType: 105,
   },
 });
 
@@ -24,9 +24,9 @@ request.interceptors.request.use(
 request.interceptors.response.use(
   ({ data }) => {
     const { code, msg } = data;
-    if (code === 200) {
+    if ([0, 200].includes(code)) {
       return data;
-    } if ([400, 40001].includes(code)) {
+    } if ([400, 40001, 105001002].includes(code)) {
       // token失效
       tokenStorage.clear();
       window.location.href = '/user/login';
@@ -39,8 +39,8 @@ request.interceptors.response.use(
     return data;
   },
   (err) => {
-    if (err.response && err.response.data) {
-      const msg = err.response.data.message;
+    if (err.response && err.response.statusText) {
+      const msg = err.response.data;
       message.error(msg);
     } else {
       message.error(err);

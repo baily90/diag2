@@ -12,6 +12,7 @@ import {
   getMarkDataService,
   handleReportService,
   getMesareicTemplateDataService,
+  getReportConfService,
 } from '@/services/report/index';
 import { AppDispatch } from '..';
 
@@ -43,7 +44,9 @@ interface ReportState {
   mark_data: [], // 标注信息
   mesareicTemplateData: [], // 报告模板
   signImg: '', // 医生签名
-  normalData: object // 一键正常配置
+  normalData: object | null, // 一键正常配置
+  isStruct: number, // 是否使用下发的模板配置，0:不使用 1:使用
+  reportConf: object | null, // 报告配置模板
 }
 
 const initialState: ReportState = {
@@ -75,6 +78,8 @@ const initialState: ReportState = {
   mesareicTemplateData: [],
   signImg: '',
   normalData: null,
+  isStruct: 0,
+  reportConf: null,
 };
 
 export const reportSlice = createSlice({
@@ -113,6 +118,7 @@ export const getEditReportInfo = (check_id: number) => async (dispatch: AppDispa
         patientReport,
         position_info,
         remain_time,
+        isStruct,
       } = data;
 
       const newSources = sources?.map((item) => {
@@ -120,6 +126,17 @@ export const getEditReportInfo = (check_id: number) => async (dispatch: AppDispa
         item.littleImg = isVedioFlag ? item.source_url_snapshot : item.source_url;
         return item;
       });
+
+      let conf = null;
+      try {
+        if (isStruct === 1) {
+          const { data: reportConf } = await getReportConfService(check_id);
+          conf = reportConf;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+
       const obj = {
         is_history: false,
         diag_id,
@@ -148,6 +165,8 @@ export const getEditReportInfo = (check_id: number) => async (dispatch: AppDispa
         mesareicTemplateData: [],
         signImg: '',
         normalData: null,
+        isStruct,
+        reportConf: conf,
       };
       dispatch(updateState(obj));
       dispatch(updateState({ is_loading: false }));
@@ -169,7 +188,12 @@ export const getReportDetailInfo = (diag_id: number) => async (dispatch: AppDisp
     const { data } = await getReportDetailInfoService(diag_id);
     if (data) {
       const {
-        check, patient, source, patientReport, report_detail_html, ai_source, product_name,
+        check,
+        patient,
+        source,
+        patientReport,
+        report_detail_html,
+        ai_source, product_name,
       } = data;
       const newSources = source?.map((item) => {
         const isVedioFlag = ['视频', 2].includes(item.source_type);
@@ -209,6 +233,7 @@ export const getReportDetailInfo = (diag_id: number) => async (dispatch: AppDisp
         mesareicTemplateData: [],
         signImg: '',
         normalData: null,
+        isStruct: 0,
       };
       dispatch(updateState(obj));
       dispatch(updateState({ is_loading: false }));

@@ -2,8 +2,8 @@ import {
   Button,
   Layout, Menu,
 } from 'antd';
-import { FunctionComponent } from 'react';
-import { Link, Outlet } from 'react-router-dom';
+import { FunctionComponent, useEffect, useState } from 'react';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import { CaretDownFilled, SettingOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';
 import ReportRuleButton from '@/components/ReportRuleButton';
@@ -21,7 +21,9 @@ interface BasicLayoutProps {
 
 const BasicLayout: FunctionComponent<BasicLayoutProps> = () => {
   console.log('BasicLayout');
+  const { pathname } = useLocation();
   const { base } = useSelector((state: RootState) => state.user);
+  const [defaultSelectedKeys, setDefaultSelectedKeys] = useState(['/', '/home'].includes(pathname) ? '/home' : pathname);
   return (
     <Layout className="site-layout">
       <Sider>
@@ -34,13 +36,13 @@ const BasicLayout: FunctionComponent<BasicLayoutProps> = () => {
         </DropdownButton>
         <Menu
           theme="dark"
-          // defaultSelectedKeys={['1']}
+          defaultSelectedKeys={[defaultSelectedKeys]}
           mode="inline"
         >
-          <Menu.Item key="home">
+          <Menu.Item key="/home">
             <Link to="/">首页</Link>
           </Menu.Item>
-          <Menu.Item key="historyReport">
+          <Menu.Item key="/historyReport">
             <Link to="/historyReport">历史报告</Link>
           </Menu.Item>
         </Menu>
