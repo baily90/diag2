@@ -22,7 +22,7 @@ interface CarotidProps {
   defaultData?: {
     [key: string]: string;
   };
-  normalData: object,
+  normalData: object | null,
   getReportData: (val: object) => void
 }
 

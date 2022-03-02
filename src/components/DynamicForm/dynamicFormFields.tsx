@@ -25,7 +25,7 @@ const FieldTypeComponent = {
   dateRange: DateRangeField,
 };
 
-const dynamicFormFields = (fields: Array<FieldType>) => fields.map(
+const dynamicFormFields = (fields: Array<FieldType>) => fields?.map(
   (
     {
       name,
@@ -55,8 +55,8 @@ const dynamicFormFields = (fields: Array<FieldType>) => fields.map(
             {prefixIcon?.(getFieldValue)}
             <FormItem {...formItemProps}>
               <FieldComponent
-                {...extraProps}
                 disabled={calIsDisabled(getFieldValue)}
+                {...extraProps}
               />
             </FormItem>
             {suffixIcon?.(getFieldValue)}

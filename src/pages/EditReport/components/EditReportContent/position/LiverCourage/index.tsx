@@ -22,7 +22,7 @@ import { RootState } from '@/store';
 const { TabPane } = Tabs;
 
 interface LiverCourageProps {
-  normalData: object,
+  normalData: object | null,
   getReportData: (val: object) => void
 }
 

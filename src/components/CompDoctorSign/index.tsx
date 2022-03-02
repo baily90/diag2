@@ -6,7 +6,7 @@ import { getSignImg } from '@/store/reducers/reportReducer';
 import { RootState } from '@/store';
 
 interface CompDoctorSignProps {
-  onSubmit: () => void;
+  onSubmit: (values: any) => Promise<void>;
 }
 
 const CompDoctorSign: FunctionComponent<CompDoctorSignProps> = ({

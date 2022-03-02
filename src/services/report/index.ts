@@ -56,3 +56,7 @@ export function getMesareicTemplateDataService(diag_id: number) {
 export function getReportConfService(checkId: number) {
   return request.get(api.report.getReportConf, { params: { checkId } });
 }
+
+export function submitReportService(data) {
+  return request.post(api.report.submitReport, data);
+}

@@ -24,7 +24,7 @@ import { RootState } from '@/store';
 const { TabPane } = Tabs;
 
 interface ThyroidProps {
-  normalData: object,
+  normalData: object | null,
   getReportData: (val: object) => void
 }
 

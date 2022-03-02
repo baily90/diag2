@@ -13,6 +13,7 @@ import {
   handleReportService,
   getMesareicTemplateDataService,
   getReportConfService,
+  submitReportService,
 } from '@/services/report/index';
 import { AppDispatch } from '..';
 
@@ -365,7 +366,7 @@ export const getMarkData = (diag_id: number) => async (dispatch: AppDispatch) =>
   }
 };
 /**
- * 发送报告
+ * 发送报告-普通报告
  * @param data
  * @returns
  */
@@ -439,4 +440,17 @@ export const getMesareicTemplateData = (diag_id: number) => async (dispatch: App
   }
 };
 
+/**
+ * 发送报告-后台配置模板的报告
+ * @param data
+ * @returns
+ */
+export const submitReport = (data) => async () => {
+  try {
+    const res = await submitReportService(data);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
 export default reportSlice.reducer;

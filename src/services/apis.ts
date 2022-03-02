@@ -14,9 +14,10 @@ export default {
     continueReport: '/api/diag_doctor/continue/diag', // 超时继续处理
     getMarkData: '/api/diag_doctor/mark/data', // 获取历史报告已标注的信息
     sendMarkData: '/api/diag_doctor/mark/data', // 发送标注信息
-    handleReport: '/api/diag_doctor/report/handle', // 发送报告
+    handleReport: '/api/diag_doctor/report/handle', // 发送报告-普通报告
     mesareicTemplateData: '/api/diag_doctor/report/template', // 肠系膜淋巴结报告模板
     getReportConf: '/gdiag-pc/v1/report/conf', // 获取配置模板
+    submitReport: '/gdiag-pc/v1/report/submit', // 发送报告-后台模板配置的报告
   },
   historyReport: {
     getHistoryReportList: (page: number) => `/api/diag_doctor/report_list/${page}`, // 获取历史报告列表

@@ -71,6 +71,12 @@ const EditReportContent: FunctionComponent<EditReportContentProps> = () => {
     setIsModalVisible(true);
   };
 
+  /**
+   * 通用模板（body_region_id：4、5）比较特殊，原本是前端写死的模板，后面需求调整为读后台配置
+   * 不走统一的校验、预览、提交报告逻辑，所有逻辑全部在<Universal />组件内部
+   * 除此之外其他模板全部是前端写死
+   * @returns
+   */
   const renderForm = () => {
     switch (type) {
       case 1:
